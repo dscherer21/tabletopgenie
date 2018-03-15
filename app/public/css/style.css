@@ -1,0 +1,20 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: rgba(81,178,0,1);
+}
+
+header {
+    background-color: rgba(164,0,178,1);
+}
+
+header.container {
+    width: 100%;
+}
+
+#pageLogo {
+    height: auto;
+    width: 1px;
+}
