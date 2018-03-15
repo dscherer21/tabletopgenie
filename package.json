@@ -1,25 +1,8 @@
 {
   "name": "tabletopgenie",
   "version": "1.0.0",
-  "description": "table top genie",
+  "description": "store star wars imperial assault character data and schedul times to play with group",
   "main": "server.js",
-  "dependencies": {
-    "bcrypt": "^1.0.3",
-    "body-parser": "^1.18.2",
-    "cookie-parser": "^1.4.3",
-    "crypto": "^1.0.1",
-    "express": "^4.16.3",
-    "express-handlebars": "^3.0.0",
-    "express-session": "^1.15.6",
-    "google-auth-library": "^1.3.2",
-    "googleapis": "^27.0.0",
-    "method-override": "^2.3.10",
-    "morgan": "^1.9.0",
-    "multer": "^1.3.0",
-    "mysql": "^2.15.0",
-    "path": "^0.12.7"
-  },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
@@ -28,10 +11,26 @@
     "type": "git",
     "url": "git+https://github.com/dscherer21/tabletopgenie.git"
   },
-  "author": "",
+  "keywords": [
+    "mysql",
+    "handlebars",
+    "express"
+  ],
+  "author": "dscherer21 mrerlander richbu",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/dscherer21/tabletopgenie/issues"
   },
-  "homepage": "https://github.com/dscherer21/tabletopgenie#readme"
+  "homepage": "https://github.com/dscherer21/tabletopgenie#readme",
+  "dependencies": {
+    "bcrypt": "^1.0.3",
+    "body-parser": "^1.18.2",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.16.3",
+    "express-handlebars": "^3.0.0",
+    "express-session": "^1.15.6",
+    "method-override": "^2.3.10",
+    "morgan": "^1.9.0",
+    "multer": "^1.3.0"
+}
 }
