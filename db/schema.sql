@@ -21,6 +21,7 @@ CREATE TABLE groups (
 CREATE TABLE user_groups (
     group_id INT,
     user_id INT,
+    imperial BOOLEAN DEFAULT false,
     foreign key (group_id) references groups(id),
     foreign key (user_id) references users(id)
 );
@@ -48,6 +49,7 @@ CREATE TABLE game_cards (
     id INT NOT NULL AUTO_INCREMENT,
     name VARCHAR(255),
     type VARCHAR(255),
+    credits INT,
     empire BOOLEAN DEFAULT false,
     primary key (id)
 );
@@ -59,7 +61,7 @@ CREATE TABLE character_cards (
     card_id INT,
     foreign key (character_id) references characters(id),
     foreign key (group_id) references groups(id),
-    foreign (key user_id) references users(id),
+    foreign key (user_id) references users(id),
     foreign key (card_id) references game_cards(id)
 );
 
