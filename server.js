@@ -60,9 +60,11 @@ app.set("view engine", "handlebars");       //sets default for file type for han
 //require(path.join(__dirname, './app/routing/htmlRoutes'))(app);
 
 var applicationController = require("./app/controllers/applicationController.js");
+var pictureController = require("./app/controllers/pictureController.js");
 
 //prepends all the paths
 app.use("/", applicationController);
+app.use("/picture", pictureController);
 
 
 // Start listening on PORT
