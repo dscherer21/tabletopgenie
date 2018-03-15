@@ -14,7 +14,7 @@ CREATE TABLE users (
 CREATE TABLE groups (
     id INT NOT NULL AUTO_INCREMENT,
     primary key (id)
-)
+);
 
 CREATE TABLE user_groups (
     group_id INT,
