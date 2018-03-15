@@ -14,6 +14,7 @@ CREATE TABLE users (
 
 CREATE TABLE groups (
     id INT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
     primary key (id)
 );
 
@@ -66,5 +67,6 @@ CREATE TABLE session (
     id INT NOT NULL AUTO_INCREMENT,
     credits INT,
     picture VARCHAR(255),
+    game_date DATE,
     primary key (id)
 );
