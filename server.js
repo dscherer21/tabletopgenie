@@ -39,7 +39,6 @@ var exphbs = require("express-handlebars");
 
 var hbs = exphbs.create({
     // Specify helpers which are only registered on this instance.
-    // so these become functions that can use within the HTML  {{foo('hello')}}
     helpers: {
         foo: function (a) { return 'FOO!' + a; },
         bar: function (b) { return 'BAR!' + b; },
@@ -49,7 +48,7 @@ var hbs = exphbs.create({
             return new Handlebars.SafeString(text);
         }
     },
-    defaultLayout: "main"
+    defaultLayout: "../../app/views/layouts/main"
 });
 
 app.engine("handlebars", hbs.engine);
@@ -57,8 +56,14 @@ app.set("view engine", "handlebars");       //sets default for file type for han
 
 
 //this is where the browser will go for paths after clicking
-require(path.join(__dirname, './app/routing/apiRoutes'))(app);
-require(path.join(__dirname, './app/routing/htmlRoutes'))(app);
+//require(path.join(__dirname, './app/routing/apiRoutes'))(app);
+//require(path.join(__dirname, './app/routing/htmlRoutes'))(app);
+
+var applicationController = require("./app/controllers/applicationController.js");
+
+//prepends all the paths
+app.use("/", applicationController);
+
 
 // Start listening on PORT
 app.listen(PORT, function() {
