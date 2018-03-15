@@ -17,8 +17,10 @@
 	<canvas id="canvas" width="320" height="240"></canvas>
 	<img id="snap">
 
-	<form action="/picture/create" method="POST">
-		<input type="submit"></input>
+	<form action="/picture/create" method="POST" enctype="multipart/form-data">
+		<input type="text" name="title" > </input>
+		<input type="file" name="upl" id="filename"> </input>
+		<input type="submit"> </input>
 	</form>
 
 
@@ -88,10 +90,17 @@
 				// Show image. 
 				image.setAttribute('src', snap);
 				image.classList.add("visible");
-				image.setAttribute('width', 320 )
-				image.setAttribute('height', 240 )
+				image.setAttribute('width', 320)
+				image.setAttribute('height', 240)
 				video.style.display = "none";
 				canvas.style.display = "none";
+
+				var filename = document.querySelector('#filename');
+				console.log(filename.files);
+				$(filename).files[0] = snap;
+				console.log("after snap");
+				console.log(filename.files);
+
 
 				// Enable delete and save buttons
 				//delete_photo_btn.classList.remove("disabled");
@@ -112,7 +121,7 @@
 
 		<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
 		 crossorigin="anonymous"></script>
-		<script src="/assets/js/ajax.js"></script>
+		{{!-- <script src="/assets/js/ajax.js"></script> --}}
 </body>
 
 </html>

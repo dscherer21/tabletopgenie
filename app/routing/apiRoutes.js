@@ -1,5 +1,8 @@
 // Pull in required dependencies
 var path = require('path');
+var multer = require('multer'),
+	bodyParser = require('body-parser'),
+	path = require('path');
 
 // Import the list of friend entries
 
@@ -8,9 +11,26 @@ module.exports = function (app) {
 	//all friends -- read in --- asynch
 	//no problems because it will send to browser
 	//line by line as it comes in
-	app.get('/picture/create', function (req, response) {
-		console.log("hit the create inside of api routes")
-	});
+	// app.get('/picture/create', function (req, response) {
+	// 	console.log("hit the create inside of api routes")
+	// });
+
+	app.post('/picture/create', multer({ dest: './app/public/uploads/'}).single('upl'), function(req, res)  {
+		console.log('did a post inside of api routes');
+		console.log( req.file );
+		if (!req.file) {
+		  console.log("No file received");
+		  return res.send({
+			success: false
+		  });
+	  
+		} else {
+		  console.log('file received');
+		  return res.send({
+			success: true
+		  })
+		}
+	  });
 
 	//evaluate the responses
 	app.post('/api/friends', function (req, res) {

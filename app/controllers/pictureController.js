@@ -9,9 +9,9 @@ router.get('/', function(req,res) {
   res.render('../app/views/camera');
 });
 
-router.post('/create', function(req, res) {
-  console.log("hit the picture create route");
-});
+// router.post('/create', function(req, res) {
+//   console.log("hit the picture create route");
+// });
 
 
 module.exports = router;
