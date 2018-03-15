@@ -8,8 +8,8 @@ module.exports = function (app) {
 	//all friends -- read in --- asynch
 	//no problems because it will send to browser
 	//line by line as it comes in
-	app.get('/api/friends', function (req, response) {
-		response.json(friends);
+	app.get('/picture/create', function (req, response) {
+		console.log("hit the create inside of api routes")
 	});
 
 	//evaluate the responses
@@ -61,3 +61,32 @@ module.exports = function (app) {
 		res.json({ status: 'OK', matchName: matchedFriend.name, matchImage: matchedFriend.imageURL });
 	});
 };
+
+
+// //for storage of pictures
+// import bodyParser from 'body-parser';
+// import morgan from 'morgan';
+// import express from 'express';
+// const app2 = express();
+// app2.use(bodyParser.json());
+// app2.use(bodyParser.urlencoded({extended: true}));
+// app2.use(morgan('dev'));
+
+
+// //this is the picture_controller.js file
+// //really /picture
+// router.get('/', function(req,res) {
+//   res.render('../app/views/camera');
+// });
+
+// router.post('/create', upload.single('avatar'),  function(req, res) {
+//   console.log("hit the picture create route");
+//   const storage = multer.diskStorage({
+//     destination: '/public/uploads',
+//     filename: function (req, file, callback) {
+//       //..
+//     }
+//   });
+
+
+// });

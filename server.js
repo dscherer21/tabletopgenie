@@ -2,6 +2,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var path = require('path');
 var methodOverride = require("method-override");
+var morgan = require('morgan');
 
 
 // Configure the Express application
@@ -25,6 +26,7 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.text());
+app.use(morgan('dev'));
 
 //allow the use of DELETE
 // Override with POST having ?_method=DELETE
@@ -56,7 +58,7 @@ app.set("view engine", "handlebars");       //sets default for file type for han
 
 
 //this is where the browser will go for paths after clicking
-//require(path.join(__dirname, './app/routing/apiRoutes'))(app);
+require(path.join(__dirname, './app/routing/apiRoutes'))(app);
 //require(path.join(__dirname, './app/routing/htmlRoutes'))(app);
 
 var applicationController = require("./app/controllers/applicationController.js");

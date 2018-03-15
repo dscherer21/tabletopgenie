@@ -12,10 +12,14 @@
 	<p>CAMERA</p>
 
 
-	<video id="video" width="640" height="480" autoplay></video>
+	<video id="video" width="320" height="240" autoplay></video>
 	<button id="snapButton">Snap Photo</button>
-	<canvas id="canvas" width="640" height="480"></canvas>
+	<canvas id="canvas" width="320" height="240"></canvas>
 	<img id="snap">
+
+	<form action="/picture/create" method="POST">
+		<input type="submit"></input>
+	</form>
 
 
 	<p class="clear">
@@ -62,9 +66,9 @@
 						// set it as src of our HTLM video element.
 						video.srcObject = mediaStream;
 						// Play the video element to show the stream to the user.
+						//to hide it, change its 
 						video.onloadedmetadata = function (e) {
 							video.play();
-							console.log("turned the camera on");
 						};
 					}).catch(
 						// Error Callback
@@ -84,6 +88,8 @@
 				// Show image. 
 				image.setAttribute('src', snap);
 				image.classList.add("visible");
+				image.setAttribute('width', 320 )
+				image.setAttribute('height', 240 )
 				video.style.display = "none";
 				canvas.style.display = "none";
 
