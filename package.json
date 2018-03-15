@@ -1,0 +1,30 @@
+{
+  "name": "tabletopgenie",
+  "version": "1.0.0",
+  "description": "store star wars imperial assault character data and schedul times to play with group",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dscherer21/tabletopgenie.git"
+  },
+  "keywords": [
+    "mysql",
+    "handlebars",
+    "express"
+  ],
+  "author": "dscherer21 mrerlander richbu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dscherer21/tabletopgenie/issues"
+  },
+  "homepage": "https://github.com/dscherer21/tabletopgenie#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "express-handlebars": "^3.0.0",
+    "mysql": "^2.15.0"
+  }
+}
