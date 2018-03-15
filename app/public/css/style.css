@@ -8,13 +8,42 @@ body {
 
 header {
     background-color: rgba(164,0,178,1);
+    box-shadow: 0 10px 10px 1px rgba(0,0,0,.5);
 }
 
 header.container {
     width: 100%;
 }
 
+hr {
+    opacity: 0;
+}
+
+footer {
+    background-color: rgba(58, 57, 57, 1);
+}
+
+.img-thumbnail {
+    background-color: rgba(164,0,178,0);
+}
+
+.col-xs-4 {
+    padding: 10px;
+}
+
+.specialFont {
+    font-family: 'Berkshire Swash', cursive;
+}
+
 #pageLogo {
     height: auto;
-    width: 1px;
+    width: 80px;
+}
+
+#copyright {
+    color: rgba(255, 255, 255, .6);
+}
+
+#footer {
+    background-color: rgba(58,57,57,1);
 }
