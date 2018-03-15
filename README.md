@@ -7,4 +7,4 @@ A database application to store Star Wars Imperial Assault character data and sc
 - Richbu
 - Mrerlander
 
-![Demo]('https://www.youtube.com/watch?v=lFUkS6UvK3o#action=share')
+Demo video here: 'https://www.youtube.com/watch?v=lFUkS6UvK3o#action=share'
