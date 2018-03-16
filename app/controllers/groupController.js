@@ -39,3 +39,5 @@ router.post('/create/users', function (req, res) {
         });
     });
 });
+
+module.exports = router;
