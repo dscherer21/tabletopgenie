@@ -18,7 +18,7 @@ app.use(express.static(path.join(__dirname, './app/public')));
 var cookieParser = require('cookie-parser');
 var session = require('express-session');  //allows user to stay logged in
 //allow sessions
-app.use(session({ secret: 'app', cookie: { maxAge: 6*1000*1000*1000*1000*1000*1000 }}));
+app.use(session({ secret: 'app', cookie: { maxAge: 6*1000*1000*1000*1000*1000*1000 }, resave: true, saveUninitialized: false}));
 app.use(cookieParser());
 
 
