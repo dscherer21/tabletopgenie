@@ -3,13 +3,12 @@ var mysql = require("mysql");
 var app = require('../../server');
 
 var connection = mysql.createConnection({
-    port: 3000,
+    port: 3306,
     host: "localhost",
     user: "root",
     password: "",
-    database: "imperial_assault_db"
+    database: "Imperial_Assault_db"
 });
-
 
 // Make connection.
 connection.connect(function (err) {
