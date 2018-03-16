@@ -2,6 +2,7 @@ var express = require('express');
 var router  = express.Router();
 
 
+console.log('picture controller is loaded...');
 
 //this is the picture_controller.js file
 //really /picture

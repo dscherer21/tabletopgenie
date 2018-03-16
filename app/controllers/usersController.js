@@ -2,7 +2,8 @@ var bcrypt = require('bcryptjs');
 var express = require('express');
 var router = express.Router();
 var mysql = require('mysql')
-var connection = require('../config/connection.js')
+
+console.log('users controller is loaded..');
 
 //this is the users_controller.js file
 router.get('/new', function (req, res) {
@@ -10,7 +11,8 @@ router.get('/new', function (req, res) {
 });
 
 router.get('/log-in', function (req, res) {
-  res.render('users/login_in');
+  console.log("hit the login route");
+  res.render('../app/views/users/login');
 });
 
 router.get('/sign-out', function (req, res) {
