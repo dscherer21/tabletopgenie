@@ -90,7 +90,7 @@ router.post('/create', function (req, res) {
               req.session.user_email = response[0].email;
               req.session.company = response[0].company;
 
-              res.redirect('/coupons')
+              res.redirect('/groups')
             });
           });
         });
