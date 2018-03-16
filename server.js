@@ -70,6 +70,7 @@ var usersController = require("./app/controllers/usersController.js");
 app.use("/", applicationController);
 app.use("/picture", pictureController);
 app.use("/group", groupController);
+app.use("/users", usersController);
 
 
 // Start listening on PORT
