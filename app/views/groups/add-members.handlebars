@@ -1,5 +1,6 @@
 <form action="/group/create/users" method="post" id="form">
-    <input type="text" name="user_email" id="user_email" placeholder="user email">
+<input type="hidden" name="group" value="{{this.group}}">
+    <input type="text" name="email" id="user_email" placeholder="user email">
     <br>
     <input type="submit" id="submitButton" value="Add New User">
 </form>

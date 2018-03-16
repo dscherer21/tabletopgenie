@@ -3,7 +3,7 @@ var router = express.Router();
 var connection = require('../config/connection.js');
 
 router.get('/new', function (req, res) {
-    res.render('groups/new');
+    res.render('../app/views/groups/new');
 });
 
 router.get('/', function (req, res) {
@@ -11,29 +11,31 @@ router.get('/', function (req, res) {
     connection.query(query, [req.session.user_id], function (err, groups) {
 
         
-        res.render('groups/main-group', {
+        res.render('../app/views/groups/main-group', {
             groups: groups
         });
     });
 });
 
 router.get('/create/members', function(req, res){
-    res.render('groups/add-members');
+    res.render('../app/views/groups/add-members');
 });
 
 router.post('/create', function (req, res) {
     var query = "SELECT * FROM groups WHERE name = ?"
 
-    connection.query(query, [req.body.name], function (err, response) {
+    connection.query(query, [req.body.group], function (err, response) {
         console.log(response)
         if (response.length > 0) {
             res.send('There is already a group with that name.');
         } else {
 
             var query2 = "INSERT INTO groups (name) VALUES (?)"
-            connection.query(query2, [req.body.name], function (err, response) {
+            connection.query(query2, [req.body.group], function (err, response) {
 
-                res.redirect('/create/members');
+                res.redirect('/group/create/members',{
+                    group: req.body.group
+                });
             });
         }
     });
@@ -45,10 +47,11 @@ router.post('/create/users', function (req, res) {
 
     connection.query(userQuery, [req.body.email], function (err, response) {
         userID = response;
+        console.log(response);
 
         var query = "INSERT INTO user_groups (group_id, user_id) VALUES (?, ?)";
-        connection.query(query, [req.body.group, userID], function (err, response) {
-            console.log(response);
+        connection.query(query, [req.body.group, userID], function (err) {
+            console.log(err);
         });
     });
 });
