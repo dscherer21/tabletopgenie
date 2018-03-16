@@ -6,7 +6,7 @@ var morgan = require('morgan');
 
 
 // Configure the Express application
-var app = express();
+var app = module.exports = express();
 var PORT = process.env.PORT || 3000;
 
 

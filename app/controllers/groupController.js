@@ -6,7 +6,15 @@ router.get('/new', function (req, res) {
     res.render('groups/new');
 });
 
-router.get('/')
+router.get('/', function (req, res) {
+    var query = "SELECT ug.* g.group_id FROM groups g LEFT JOIN user_groups ug ON g.id = ug.group_id WHERE ug.user_id = ?";
+    connection.query(query, [req.session.user_id], function (err, groups) {
+
+        res.render('groups/groups', {
+            groups: groups
+        });
+    });
+});
 
 router.post('/create', function (req, res) {
     var query = "SELECT * FROM groups WHERE name = ?"
