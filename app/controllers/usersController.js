@@ -1,13 +1,9 @@
 var bcrypt = require('bcryptjs');
 var express = require('express');
 var router = express.Router();
-<<<<<<< HEAD
-var connection = require("../config/connection");
-=======
 var mysql = require('mysql');
 var connection = require('../config/connection.js');
 
->>>>>>> bca84bcd83667a254e4e3438354defd63f09b0a7
 
 console.log('users controller is loaded..');
 
