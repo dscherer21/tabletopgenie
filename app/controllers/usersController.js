@@ -10,7 +10,7 @@ console.log('users controller is loaded..');
 //this is the users_controller.js file
 router.get('/new', function (req, res) {
   res.render('users/new');
-});
+});                                  
 
 router.get('/log-in', function (req, res) {
   console.log("hit the login route");

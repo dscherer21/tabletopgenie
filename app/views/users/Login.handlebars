@@ -1,39 +1,71 @@
+<div id="loginForm">
+	<h2>
 
-
-<h2>User Login</h2>
-<hr>
-<p id='loginWarning'></p>
-<form action="/users/login" method="post" id="form">
-	<label for="user_email">User Email Address:</label>
-	<input type="text" name="user_email" id="user_email" placeholder="example@email.com">
-	<br/>
-	<label for="user_password">User Password:</label>
-	<input type="text" name="user_password" id="user_password" placeholder="Password" >
+		User Login</h2>
 	<hr>
-	<input type="submit" class='btn btn-primary' id="submitButton" value="Login">
-</form>
-<hr>
-<h2>Create a New Account</h2>
-<hr>
-<p id='newUserWarning'></p>
-<form action="/users/create" method="post" id="form">
-	<label for="user_Name">Create a Username:</label>
-	<input type="text" name="user_name" id="user_name" placeholder="Username">
-	<br/>
-	<label for="register_user_email">Email Address:</label>
-	<input type="text" name="user_email" id="register_user_email" placeholder="Email">
-	<br/>
-	<label for="register_user_password">Password:</label>
-	<input type="text" name="user_password" id="register_user_password" placeholder="Password" >
-	<br/>
-	<label for="user_password_2">Confirm Password:</label>
-	<input type="text" name="user_password_2" id="user_password_2" placeholder="Confirm Password" >
+	<p id='loginWarning'></p>
+	<form action="/users/login" method="post" id="form-login">
+		<label for="user_email">User Email Address:</label>
+		<input type="text" name="user_email" id="user_email" placeholder="example@email.com">
+		<br/>
+		<label for="user_password">User Password:</label>
+		<input type="text" name="user_password" id="user_password" placeholder="Password">
+		<hr>
+		<input type="submit" class='btn btn-primary' id="submitButton" value="Login">
+		<button class='btn btn-primary bttn-register' type='button'>Register</button>
+	</form>
 	<hr>
-	<input type="submit" id="submitButton" class='btn btn-primary' value="Create New User">
-</form>
+</div>
+<div id="newUserForm">
+	<h2>Create a New Account</h2>
+	<hr>
+	<p id='newUserWarning'></p>
+	<form action="/users/create" method="post" id="form-newuser">
+		<label for="user_Name">Create a Username:</label>
+		<input type="text" name="user_name" id="user_name" placeholder="Username">
+		<br/>
+		<label for="register_user_email">Email Address:</label>
+		<input type="text" name="user_email" id="register_user_email" placeholder="Email">
+		<br/>
+		<label for="register_user_password">Password:</label>
+		<input type="text" name="user_password" id="register_user_password" placeholder="Password">
+		<br/>
+		<label for="user_password_2">Confirm Password:</label>
+		<input type="text" name="user_password_2" id="user_password_2" placeholder="Confirm Password">
+		<hr>
+		<input type="submit" id="submitButton" class='btn btn-primary' value="Create New User">
+		<button class='btn btn-primary bttn-existing' type='button'>Already Registered</button>
+	</form>
+</div>
 <hr>
 <hr>
 
+<!-- 
+	<script type="text/javascript" src="../../javascript/login.js"></script>  
+-->
 
-	<p class="clear">
-		{{logged_in}} | {{{ body }}}
+
+<script>
+var dispNewUserForm = function () {
+    $("#newUserForm").css("display", "block");
+    $("#loginForm").css("display", "none");
+};
+
+var dispCurrentUserForm = function () {
+    $("#newUserForm").css("display", "none");
+    $("#loginForm").css("display", "block");
+};
+
+var checkLogin = function () {
+    //check the login
+};
+
+
+$(document).ready(function () {
+    dispCurrentUserForm();
+});
+$(document.body).on("click", ".bttn-register", dispNewUserForm);
+$(document.body).on("click", ".bttn-existing", dispCurrentUserForm);
+
+</script>
+
