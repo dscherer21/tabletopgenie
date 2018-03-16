@@ -27,5 +27,13 @@ router.post('/create', function (req, res) {
 });
 
 router.post('/create/users', function (req, res){
+    var userID = "";
+    var userQuery = "SELECT id FROM users WHERE email = ?";
+
+    connection.query(userQuery, [req.body.email], function(err, response){
+        userID = response;
+        
     var query = "INSERT INTO user_groups (group_id, user_id) VALUES (?, ?)";
+    
+})
 })
