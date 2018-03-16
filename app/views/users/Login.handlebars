@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="../../css/style.css" type="text/css" />
+	<title>Table Top Genie</title>
+</head>
+
+<body>
+
+	<p>User Login</p>
+
+
+	<video id="video" width="320" height="240" autoplay></video>
+	<button id="snapButton">Snap Photo</button>
+	<canvas id="canvas" width="320" height="240"></canvas>
+	<br/>
+	<br/>
+	<img id="snap">
+
+	<form action="/picture/create" enctype="multipart/form-data" method="post" id="form">
+		<input type="text" name="title">
+		<br/>
+		<input type="file" name="upl" id="filename">
+		<br/>
+		<input type="submit" id="submitButton">
+	</form>
+	<button id="sendButton" class="sendButton">Send Data</button>
+	<br/>
+	<br/>
+
+
+	<p class="clear">
+		{{logged_in}} | {{{ body }}}
+
+		<script>
+
+		</script>
+
+		<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+		 crossorigin="anonymous"></script> {{!--
+		<script src="/assets/js/ajax.js"></script> --}}
+</body>
+
+</html>

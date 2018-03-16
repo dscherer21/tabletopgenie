@@ -63,6 +63,8 @@ require(path.join(__dirname, './app/routing/apiRoutes'))(app);
 var groupController = require("./app/controllers/groupController.js");
 var applicationController = require("./app/controllers/applicationController.js");
 var pictureController = require("./app/controllers/pictureController.js");
+var usersController = require("./app/controllers/usersController.js");
+
 
 //prepends all the paths
 app.use("/", applicationController);
