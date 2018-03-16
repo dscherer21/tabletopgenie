@@ -1,53 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-	<meta charset="UTF-8">
-	<link rel="stylesheet" href="../../css/style.css" type="text/css" />
-	<title>Table Top Genie</title>
-</head>
 
-<body>
-
-	<p>User Login</p>
-
+<h2>User Login</h2>
+<hr>
+<p id='loginWarning'></p>
+<form action="/users/login" method="post" id="form">
+	<label for="user_email">User Email Address:</label>
+	<input type="text" name="user_email" id="user_email" placeholder="example@email.com">
 	<br/>
-
-
-	<form action="/users/login" method="post" id="form">
-		<input type="text" name="user_email" id="user_email" placeholder="user email">
-		<br/>
-		<input type="text" name="user_password" id="user_password" placeholder="password" >
-		<br/>
-		<input type="submit" id="submitButton" value="Login">
-	</form>
+	<label for="user_password">User Password:</label>
+	<input type="text" name="user_password" id="user_password" placeholder="Password" >
+	<hr>
+	<input type="submit" class='btn btn-primary' id="submitButton" value="Login">
+</form>
+<hr>
+<h2>Create a New Account</h2>
+<hr>
+<p id='newUserWarning'></p>
+<form action="/users/create" method="post" id="form">
+	<label for="user_Name">Create a Username:</label>
+	<input type="text" name="user_name" id="user_name" placeholder="Username">
 	<br/>
+	<label for="register_user_email">Email Address:</label>
+	<input type="text" name="user_email" id="register_user_email" placeholder="Email">
 	<br/>
-	<form action="/users/create" method="post" id="form">
-		<input type="text" name="user_id" id="user_id" placeholder="user id">
-		<br/>
-		<input type="text" name="user_email" id="user_email" placeholder="user email">
-		<br/>
-		<input type="text" name="user_password" id="user_password" placeholder="password" >
-		<br/>
-		<input type="text" name="user_password_2" id="user_password_2" placeholder="confirm password" >
-		<br/>
-		<input type="submit" id="submitButton" value="Create New User">
-	</form>
+	<label for="register_user_password">Password:</label>
+	<input type="text" name="user_password" id="register_user_password" placeholder="Password" >
 	<br/>
-	<br/>
+	<label for="user_password_2">Confirm Password:</label>
+	<input type="text" name="user_password_2" id="user_password_2" placeholder="Confirm Password" >
+	<hr>
+	<input type="submit" id="submitButton" class='btn btn-primary' value="Create New User">
+</form>
+<hr>
+<hr>
 
 
 	<p class="clear">
 		{{logged_in}} | {{{ body }}}
-
-		<script>
-
-		</script>
-
-		<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
-		 crossorigin="anonymous"></script> {{!--
-		<script src="/assets/js/ajax.js"></script> --}}
-</body>
-
-</html>
