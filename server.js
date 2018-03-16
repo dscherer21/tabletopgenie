@@ -60,13 +60,14 @@ app.set("view engine", "handlebars");       //sets default for file type for han
 //this is where the browser will go for paths after clicking
 require(path.join(__dirname, './app/routing/apiRoutes'))(app);
 //require(path.join(__dirname, './app/routing/htmlRoutes'))(app);
-var groupsController = require ("./app/controllers/groupController.js");
+var groupController = require ("./app/controllers/groupController.js");
 var applicationController = require("./app/controllers/applicationController.js");
 var pictureController = require("./app/controllers/pictureController.js");
 
 //prepends all the paths
 app.use("/", applicationController);
 app.use("/picture", pictureController);
+app.use("/group", groupController);
 
 
 // Start listening on PORT

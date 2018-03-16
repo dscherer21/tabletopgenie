@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var connection = require('../config/connection.js');
+//var connection = require('../config/connection.js');
 
 router.get('/new', function (req, res) {
     res.render('groups/new');
