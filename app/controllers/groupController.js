@@ -10,10 +10,15 @@ router.get('/', function (req, res) {
     var query = "SELECT ug.* g.group_id FROM groups g LEFT JOIN user_groups ug ON g.id = ug.group_id WHERE ug.user_id = ?";
     connection.query(query, [req.session.user_id], function (err, groups) {
 
-        res.render('groups/groups', {
+        
+        res.render('groups/main-group', {
             groups: groups
         });
     });
+});
+
+router.get('/create/members', function(req, res){
+    res.render('groups/add-members');
 });
 
 router.post('/create', function (req, res) {
