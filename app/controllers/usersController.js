@@ -23,6 +23,16 @@ router.get('/sign-out', function (req, res) {
 
 //if user trys to sign in with the wrong password or email tell them that on the page
 router.post('/login', function (req, res) {
+  console.log("hit the post for login ...");
+  //console.log("req=");
+  //console.log(req);
+  //console.log("res=");
+  //console.log(res);
+  var user_email = req.body.user_email;
+  var user_password = req.body.user_password;
+
+  console.log(user_email);
+  console.log(user_password);
 
   var query = "SELECT * FROM users WHERE email = ?";
 
@@ -37,7 +47,7 @@ router.post('/login', function (req, res) {
         req.session.logged_in = true;
         req.session.user_id = response[0].id;
         req.session.user_email = response[0].email;
-        req.session.company = response[0].company;
+        //req.session.company = response[0].company;
         req.session.username = response[0].username;
 
         res.redirect('/coupon');

@@ -11,22 +11,29 @@
 
 	<p>User Login</p>
 
-
-	<video id="video" width="320" height="240" autoplay></video>
-	<button id="snapButton">Snap Photo</button>
-	<canvas id="canvas" width="320" height="240"></canvas>
 	<br/>
-	<br/>
-	<img id="snap">
 
-	<form action="/picture/create" enctype="multipart/form-data" method="post" id="form">
-		<input type="text" name="title">
+
+	<form action="/users/login" method="post" id="form">
+		<input type="text" name="user_email" id="user_email" placeholder="user email">
 		<br/>
-		<input type="file" name="upl" id="filename">
+		<input type="text" name="user_password" id="user_password" placeholder="password" >
 		<br/>
-		<input type="submit" id="submitButton">
+		<input type="submit" id="submitButton" value="Login">
 	</form>
-	<button id="sendButton" class="sendButton">Send Data</button>
+	<br/>
+	<br/>
+	<form action="/users/create" method="post" id="form">
+		<input type="text" name="user_id" id="user_id" placeholder="user id">
+		<br/>
+		<input type="text" name="user_email" id="user_email" placeholder="user email">
+		<br/>
+		<input type="text" name="user_password" id="user_password" placeholder="password" >
+		<br/>
+		<input type="text" name="user_password_2" id="user_password_2" placeholder="confirm password" >
+		<br/>
+		<input type="submit" id="submitButton" value="Create New User">
+	</form>
 	<br/>
 	<br/>
 
