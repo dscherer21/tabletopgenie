@@ -31,6 +31,7 @@ router.post('/login', function (req, res) {
   //console.log("res=");
   //console.log(res);
   var user_email = req.body.user_email;
+  user_email = user_email.toLowerCase();
   var user_password = req.body.user_password;
 
   console.log(user_email);
@@ -41,7 +42,7 @@ router.post('/login', function (req, res) {
   connection.query(query, [req.body.user_email], function (err, response) {
     console.log(response);
     if (response.length == 0) {
-      console.log ("no such user");
+      console.log("no such user");
       //res.redirect('/users/login-in')
       res.send('no such user');
       return;
@@ -58,9 +59,10 @@ router.post('/login', function (req, res) {
         req.session.username = response[0].name;
 
         res.redirect('/group');
+        //res.redirect('/');
       } else {
         console.log("password does not match");
-        //res.redirect('/users/login-in')
+        res.redirect('/users/login-in');
       }
     });
   });
@@ -68,10 +70,12 @@ router.post('/login', function (req, res) {
 
 router.post('/create', function (req, res) {
   var query = "SELECT * FROM users WHERE email = ?"
-console.log("/create hit");
   var userPassword = req.body.user_password;
-  var userName = req.body.user_id;
+  var userName = req.body.user_name;
   var userEmail = req.body.user_email;
+  var tempStr = "";
+  tempStr = userEmail;
+  userEmail = tempStr.toLowerCase();
   connection.query(query, [req.body.user_email], function (err, response) {
     console.log(response)
     if (response.length > 0) {
@@ -81,23 +85,25 @@ console.log("/create hit");
       console.log("no such user, creating a new user");
       bcrypt.genSalt(10, function (err, salt) {
         //res.send(salt)
-        console.log("got hash");
         bcrypt.hash(userPassword, salt, function (err, hash) {
-          console.log("at the insert query");
           var query = "INSERT INTO users (name, email, password_hash ) VALUES (?, ?, ? )"
 
-          connection.query(query, [ userName, userEmail, hash], function (err, response) {
-
+          connection.query(query, [userName, userEmail, hash], function (err, response) {
+            //need to add error 
+            console.log(err);
             req.session.logged_in = true;
 
-            req.session.user_id = response.insertId; //only way to get id of an insert for the mysql npm package
+            //req.session.user_id = response.insertId; //only way to get id of an insert for the mysql npm package
+            //console.log(req.session.user_id);
+            req.session.username = userName;
+            req.session.user_email = userEmail;
 
-            var query = "SELECT * FROM users WHERE id = ?"
-            connection.query(query, [req.session.user_id], function (err, response) {
-              req.session.username = response[0].name;
-              req.session.user_email = response[0].email;
-              res.redirect('/group')
-            });
+            //var query = "SELECT * FROM users WHERE id = ?"
+            //connection.query(query, [req.session.user_id], function (err, response) {
+            //  console.log("after last query");
+            res.redirect('/group');
+            //res.redirect('/');
+            //});
           });
         });
       });
