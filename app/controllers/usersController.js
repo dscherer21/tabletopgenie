@@ -9,13 +9,13 @@ router.get('/new', function (req, res) {
   res.render('users/new');
 });
 
-router.get('/sign-in', function (req, res) {
-  res.render('users/sign_in');
+router.get('/log-in', function (req, res) {
+  res.render('users/login_in');
 });
 
 router.get('/sign-out', function (req, res) {
   req.session.destroy(function (err) {
-    res.redirect('/coupons')
+    res.redirect('/')
   })
 });
 
@@ -26,7 +26,7 @@ router.post('/login', function (req, res) {
 
   connection.query(query, [req.body.email], function (err, response) {
     if (response.length == 0) {
-      res.redirect('/users/sign-in')
+      res.redirect('/users/login-in')
     }
 
     bcrypt.compare(req.body.password, response[0].password_hash, function (err, result) {
@@ -40,7 +40,7 @@ router.post('/login', function (req, res) {
 
         res.redirect('/coupon');
       } else {
-        res.redirect('/users/sign-in')
+        res.redirect('/users/login-in')
       }
     });
   });
