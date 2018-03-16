@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var connection = require('../config/connection.js');
 
-router.get('/new', function(req, res){
+router.get('/new', function (req, res) {
     res.render('groups/new');
 });
 
@@ -26,14 +26,16 @@ router.post('/create', function (req, res) {
     });
 });
 
-router.post('/create/users', function (req, res){
+router.post('/create/users', function (req, res) {
     var userID = "";
     var userQuery = "SELECT id FROM users WHERE email = ?";
 
-    connection.query(userQuery, [req.body.email], function(err, response){
+    connection.query(userQuery, [req.body.email], function (err, response) {
         userID = response;
-        
-    var query = "INSERT INTO user_groups (group_id, user_id) VALUES (?, ?)";
-    
-})
-})
+
+        var query = "INSERT INTO user_groups (group_id, user_id) VALUES (?, ?)";
+        connection.query(query, [req.body.group, userID], function (err, response) {
+            console.log(response);
+        });
+    });
+});
