@@ -4,6 +4,16 @@
 
 body {
     background-color: rgba(81,178,0,1);
+    font-family: 'Domine', serif;
+}
+
+p {
+    font-size: 22px;
+}
+
+a {
+    color: inherit;
+    text-decoration: underline;
 }
 
 header {
