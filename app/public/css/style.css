@@ -50,6 +50,20 @@ footer {
     width: 80px;
 }
 
+#loginWarning {
+    color: rgba(214,40,40,1);
+    text-decoration: underline overline;
+    font-weight: bold;
+    font-size: 32px;
+}
+
+#newUserWarning {
+    color: rgba(214,40,40,1);
+    text-decoration: underline overline;
+    font-weight: bold;
+    font-size: 32px;
+}
+
 #copyright {
     color: rgba(255, 255, 255, .6);
 }

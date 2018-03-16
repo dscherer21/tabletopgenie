@@ -7,9 +7,8 @@ var connection = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "",
-    database: "imperial_assault_db"
+    database: "Imperial_Assault_db"
 });
-
 
 // Make connection.
 connection.connect(function (err) {
