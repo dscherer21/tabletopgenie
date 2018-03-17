@@ -1,7 +1,19 @@
+<div id="modal-help" class="modal" >
+	<h3 id="help-errCode">Error # </h3>
+	<br/>
+	<hr>
+	<h4 id="help-errLine">line</h4>
+	<br/>
+	<hr>
+	<h4 id="help-errExp">explanation</h4>
+</div>
+
 <div id="loginForm">
 	<h2>User Login</h2>
 	<hr>
-	<p id='loginWarning'> </p>
+	<span id='loginWarning'> </span>
+	<button class='btn btn-primary bttn-help-user' id='bttn-help-user'  type='button'>?</button>
+	<br/>
 	<form action="/users/login" method="post" id="form-login">
 		<label for="user_email">User Email Address:</label>
 		<input type="text" name="user_email" id="user_email" placeholder="example@email.com">
@@ -18,7 +30,9 @@
 <div id="newUserForm">
 	<h2>Create a New Account</h2>
 	<hr>
-	<p id='newUserWarning'> </p>
+	<span id='newUserWarning'> </span>
+	<button class='btn btn-primary bttn-help-new' id='bttn-help-new' type='button'>?</button>
+	<br/>
 	<form action="/users/create" method="post" id="form-newuser">
 		<label for="user_Name">Create a Username:</label>
 		<input type="text" name="user_name" id="user_name" placeholder="Username">
@@ -46,14 +60,36 @@
 
 
 <script>
+	var dispHelpUser = function (_showBttn) {
+		//0 = hide the help button until an error comes in
+		//1=  show the help button
+		if (_showBttn) {
+			$("#bttn-help-user").css("display", "block");
+		} else {
+			$("#bttn-help-user").css("display", "none");
+		};
+	};
+
+	var dispHelpNew = function (_showBttn) {
+		//0 = hide the help button until an error comes in
+		//1=  show the help button
+		if (_showBttn) {
+			$("#bttn-help-new").css("display", "block");
+		} else {
+			$("#bttn-help-new").css("display", "none");
+		};
+	};
+
 	var dispNewUserForm = function () {
 		$("#newUserForm").css("display", "block");
 		$("#loginForm").css("display", "none");
+		dispHelpNew(false);
 	};
 
 	var dispCurrentUserForm = function () {
 		$("#newUserForm").css("display", "none");
 		$("#loginForm").css("display", "block");
+		dispHelpUser(false);
 	};
 
 	var createNewUser = function () {
@@ -70,8 +106,10 @@
 				if (data.errCode === 0) {
 					//there is an error
 					$("#newUserWarning").text(" ");
+					dispHelpNew(false);
 				} else {
 					$("#newUserWarning").text(data.errMsg);
+					dispHelpNew(true);
 				};
 			});
 	};
@@ -90,8 +128,10 @@
 				if (data.errCode === 0) {
 					//there is an error
 					$("#loginWarning").text(" ");
+					dispHelpUser(false);
 				} else {
 					$("#loginWarning").text(data.errMsg);
+					dispHelpUser(true);
 				};
 			});
 	};
@@ -104,5 +144,7 @@
 	$(document.body).on("click", ".bttn-existing", dispCurrentUserForm);
 	$(document.body).on("click", ".bttn-create-new", createNewUser);
 	$(document.body).on("click", ".bttn-login", checkLogin);
+	$(document.body).on("click", ".bttn-help-user", checkLogin);
+	$(document.body).on("click", ".bttn-help-new", checkLogin);
 
 </script>
