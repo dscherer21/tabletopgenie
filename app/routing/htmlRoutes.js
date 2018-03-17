@@ -1,8 +1,11 @@
 
 //use path to combine paths
 var path = require('path');
+var express = require('express');
+var router = express.Router();
 
-//need to pass in app because express is not scoped here
+
+
 module.exports = function(app) {
 
 	//home page

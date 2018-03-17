@@ -41,7 +41,6 @@ router.post('/login', function (req, res) {
     res.send(respondObj);  //send the object
   };
 
-  console.log("hit the post for login ...");
   var user_email = req.body.user_email;
   user_email = user_email.toLowerCase().trim();
   var user_password = req.body.user_password;
@@ -50,9 +49,7 @@ router.post('/login', function (req, res) {
   var query = "SELECT * FROM users WHERE email = ?";
 
   connection.query(query, [user_email], function (err, response) {
-    console.log(response);
     if (response.length == 0) {
-      console.log('no such user');
       sendObjBack(35,
         "no such user",
         1,

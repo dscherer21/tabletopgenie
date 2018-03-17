@@ -81,14 +81,12 @@
 		//check the login
 		//clear out the warning first
 		$("#loginWarning").text(" ");
-		console.log('sent block');
 		$.post("/users/login",
 			{
 				user_email: $("#user_email").val(),
 				user_password: $("#user_password").val()
 			},
 			function (data, status) {
-				console.log('got a return');
 				if (data.errCode === 0) {
 					//there is an error
 					$("#loginWarning").text(" ");
