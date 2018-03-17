@@ -4,6 +4,7 @@
 
 body {
     background-color: rgba(81,178,0,1);
+    background-image: linear-gradient(180deg, rgba(81,178,0,1), yellow, rgba(81,178,0,1));
     font-family: 'Domine', serif;
 }
 
@@ -18,6 +19,7 @@ a {
 
 header {
     background-color: rgba(164,0,178,1);
+    background-image: linear-gradient(180deg, rgba(164,0,178,1), white, rgba(164,0,178,1));
     box-shadow: 0 10px 10px 1px rgba(0,0,0,.5);
 }
 
