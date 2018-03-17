@@ -64,6 +64,7 @@ var groupController = require("./app/controllers/groupController.js");
 var applicationController = require("./app/controllers/applicationController.js");
 var pictureController = require("./app/controllers/pictureController.js");
 var usersController = require("./app/controllers/usersController.js");
+var campaignController = require("./app/controllers/campaignController.js");
 
 
 //prepends all the paths
@@ -71,6 +72,7 @@ app.use("/", applicationController);
 app.use("/picture", pictureController);
 app.use("/group", groupController);
 app.use("/users", usersController);
+app.use("/campaign", campaignController);
 
 
 // Start listening on PORT

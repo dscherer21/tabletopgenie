@@ -7,9 +7,8 @@ router.get('/new', function (req, res) {
 });
 
 router.get('/', function (req, res) {
-    var query = "SELECT ug.* g.group_id FROM groups g LEFT JOIN user_groups ug ON g.id = ug.group_id WHERE ug.user_id = ?";
+    var query = "SELECT ug.*, g.group_id FROM groups g LEFT JOIN user_groups ug ON g.id = ug.group_id WHERE ug.user_id = ?";
     connection.query(query, [req.session.user_id], function (err, groups) {
-
 
         res.render('../app/views/groups/main-group', {
             groups: groups,
