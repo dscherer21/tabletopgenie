@@ -10,14 +10,15 @@ router.get('/', function (req, res) {
     var query = "SELECT ug.* g.group_id FROM groups g LEFT JOIN user_groups ug ON g.id = ug.group_id WHERE ug.user_id = ?";
     connection.query(query, [req.session.user_id], function (err, groups) {
 
-        
+
         res.render('../app/views/groups/main-group', {
-            groups: groups
+            groups: groups,
+            logged_in: req.session.logged_in
         });
     });
 });
 
-router.get('/create/members', function(req, res){
+router.get('/create/members', function (req, res) {
     res.render('../app/views/groups/add-members');
 });
 
@@ -32,9 +33,12 @@ router.post('/create', function (req, res) {
 
             var query2 = "INSERT INTO groups (name) VALUES (?)"
             connection.query(query2, [req.body.group], function (err, response) {
+                var queryAdd = "INSERT INTO user_groups (group_id, user_id) VALUES (?, ?)";
+                connection.query(queryAdd, [req.body.group, req.session.user_id], function (err, res) {
 
-                res.redirect('/group/create/members',{
-                    group: req.body.group
+                    res.redirect('/group/create/members', {
+                        group: req.body.group
+                    });
                 });
             });
         }
