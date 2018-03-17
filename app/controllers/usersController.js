@@ -23,47 +23,64 @@ router.get('/sign-out', function (req, res) {
   })
 });
 
+
 //if user trys to sign in with the wrong password or email tell them that on the page
 router.post('/login', function (req, res) {
+  var respondObj = {
+    errCode: 0,   //0 if no error
+    errLine: 0,   //which line of the input form
+    errrMsg: "", //error message
+    errExp: ""   //error explanation
+  };
+
+  var sendObjBack = function (errCode, errMsg, errLine, errExp) {
+    respondObj.errCode = errCode;
+    respondObj.errLine = errLine;
+    respondObj.errMsg = errMsg;
+    respondObj.errExp = errExp;
+    res.send(respondObj);  //send the object
+  };
+
   console.log("hit the post for login ...");
   var user_email = req.body.user_email;
-  user_email = user_email.toLowerCase();
+  user_email = user_email.toLowerCase().trim();
   var user_password = req.body.user_password;
-
-  console.log(user_email);
-  console.log(user_password);
+  user_password = user_password.trim();
 
   var query = "SELECT * FROM users WHERE email = ?";
 
-  connection.query(query, [req.body.user_email], function (err, response) {
+  connection.query(query, [user_email], function (err, response) {
     console.log(response);
     if (response.length == 0) {
-      console.log("no such user");
-      //res.redirect('/users/login-in')
-      res.send('no such user');
+      console.log('no such user');
+      sendObjBack(35,
+        "no such user",
+        1,
+        "the email you have entered is not on file"
+      );
       return;
     };
-    console.log("user found");
-    bcrypt.compare(req.body.user_password, response[0].password_hash, function (err, result) {
+    bcrypt.compare(user_password, response[0].password_hash, function (err, result) {
       if (result == true) {
-        console.log("user password matches");
-
         req.session.logged_in = true;
         req.session.user_id = response[0].id;
         req.session.user_email = response[0].email;
-        //req.session.company = response[0].company;
         req.session.username = response[0].name;
 
         res.redirect('/group');
         //res.redirect('/');
       } else {
-        console.log("password does not match");
-        res.send("password does not match");
-        //res.redirect('/users/login-in');
+        sendObjBack(35,
+          "wrong password",
+          1,
+          "the password entered does not match the one on record"
+        );
       }
     });
   });
 });
+
+
 
 router.post('/create', function (req, res) {
   var query = "SELECT * FROM users WHERE email = ?"
@@ -86,10 +103,6 @@ router.post('/create', function (req, res) {
     respondObj.errExp = errExp;
     res.send(respondObj);  //send the object
   };
-
-  //var tempStr = "";
-  //tempStr = userEmail;
-  userEmail = userEmail.toLowerCase();
   //check if the user name is blank
   if (userName === undefined || userName === null) {
     sendObjBack(10,
@@ -132,11 +145,10 @@ router.post('/create', function (req, res) {
   userEmail = userEmail.toLowerCase().trim();
   if (userEmail === null || userEmail === "") {
     sendObjBack(13,
-      "user email is blank",
+      "user email is blank 2",
       2,
       "the user name is blank and needs to be the proper format"
     );
-    res.send("email is blank");
     return;
   };
 
@@ -219,12 +231,14 @@ router.post('/create', function (req, res) {
   connection.query(query, [req.body.user_email], function (err, response) {
     console.log(response)
     if (response.length > 0) {
-      res.send('we already have an email or username for this account')
+      sendObjBack(40,
+        "email is already in use",
+        1,
+        "an account with that email has already been setup. Either sign in " +
+        "with that account or pick another email to use"
+      );
     } else {
-
-      console.log("no such user, creating a new user");
       bcrypt.genSalt(10, function (err, salt) {
-        //res.send(salt)
         bcrypt.hash(userPassword, salt, function (err, hash) {
           var query = "INSERT INTO users (name, email, password_hash ) VALUES (?, ?, ? )"
 
@@ -232,18 +246,9 @@ router.post('/create', function (req, res) {
             //need to add error 
             console.log(err);
             req.session.logged_in = true;
-
-            //req.session.user_id = response.insertId; //only way to get id of an insert for the mysql npm package
-            //console.log(req.session.user_id);
             req.session.username = userName;
             req.session.user_email = userEmail;
-
-            //var query = "SELECT * FROM users WHERE id = ?"
-            //connection.query(query, [req.session.user_id], function (err, response) {
-            //  console.log("after last query");
             res.redirect('/group');
-            //res.redirect('/');
-            //});
           });
         });
       });

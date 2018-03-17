@@ -1,9 +1,7 @@
 <div id="loginForm">
-	<h2>
-
-		User Login</h2>
+	<h2>User Login</h2>
 	<hr>
-	<p id='loginWarning'></p>
+	<p id='loginWarning'> </p>
 	<form action="/users/login" method="post" id="form-login">
 		<label for="user_email">User Email Address:</label>
 		<input type="text" name="user_email" id="user_email" placeholder="example@email.com">
@@ -11,7 +9,8 @@
 		<label for="user_password">User Password:</label>
 		<input type="text" name="user_password" id="user_password" placeholder="Password">
 		<hr>
-		<input type="submit" class='btn btn-primary' id="submitButton" value="Login">
+		<!-- <input type="submit" class='btn btn-primary' id="submitButton" value="Login"> -->
+		<button class='btn btn-primary bttn-login' type='button'>Login</button>
 		<button class='btn btn-primary bttn-register' type='button'>Register</button>
 	</form>
 	<hr>
@@ -19,7 +18,7 @@
 <div id="newUserForm">
 	<h2>Create a New Account</h2>
 	<hr>
-	<p id='newUserWarning'></p>
+	<p id='newUserWarning'> </p>
 	<form action="/users/create" method="post" id="form-newuser">
 		<label for="user_Name">Create a Username:</label>
 		<input type="text" name="user_name" id="user_name" placeholder="Username">
@@ -33,7 +32,8 @@
 		<label for="user_password_2">Confirm Password:</label>
 		<input type="text" name="user_password_2" id="user_password_2" placeholder="Confirm Password">
 		<hr>
-		<input type="submit" id="submitButton" class='btn btn-primary' value="Create New User">
+		<!-- <input type="submit" id="submitButton" class='btn btn-primary' value="Create New User">  -->
+		<button class='btn btn-primary bttn-create-new' type='button'>Create New User</button>
 		<button class='btn btn-primary bttn-existing' type='button'>Already Registered</button>
 	</form>
 </div>
@@ -46,26 +46,65 @@
 
 
 <script>
-var dispNewUserForm = function () {
-    $("#newUserForm").css("display", "block");
-    $("#loginForm").css("display", "none");
-};
+	var dispNewUserForm = function () {
+		$("#newUserForm").css("display", "block");
+		$("#loginForm").css("display", "none");
+	};
 
-var dispCurrentUserForm = function () {
-    $("#newUserForm").css("display", "none");
-    $("#loginForm").css("display", "block");
-};
+	var dispCurrentUserForm = function () {
+		$("#newUserForm").css("display", "none");
+		$("#loginForm").css("display", "block");
+	};
 
-var checkLogin = function () {
-    //check the login
-};
+	var createNewUser = function () {
+		//clear out the warning first
+		$("#newUserWarning").text(" ");
+		$.post("/users/create",
+			{
+				user_name: $("#user_name").val(),
+				user_email: $("#register_user_email").val(),
+				user_password: $("#register_user_password").val(),
+				user_password2: $("#user_password2").val()
+			},
+			function (data, status) {
+				if (data.errCode === 0) {
+					//there is an error
+					$("#newUserWarning").text(" ");
+				} else {
+					$("#newUserWarning").text(data.errMsg);
+				};
+			});
+	};
 
 
-$(document).ready(function () {
-    dispCurrentUserForm();
-});
-$(document.body).on("click", ".bttn-register", dispNewUserForm);
-$(document.body).on("click", ".bttn-existing", dispCurrentUserForm);
+	var checkLogin = function () {
+		//check the login
+		//clear out the warning first
+		$("#loginWarning").text(" ");
+		console.log('sent block');
+		$.post("/users/login",
+			{
+				user_email: $("#user_email").val(),
+				user_password: $("#user_password").val()
+			},
+			function (data, status) {
+				console.log('got a return');
+				if (data.errCode === 0) {
+					//there is an error
+					$("#loginWarning").text(" ");
+				} else {
+					$("#loginWarning").text(data.errMsg);
+				};
+			});
+	};
+
+
+	$(document).ready(function () {
+		dispCurrentUserForm();
+	});
+	$(document.body).on("click", ".bttn-register", dispNewUserForm);
+	$(document.body).on("click", ".bttn-existing", dispCurrentUserForm);
+	$(document.body).on("click", ".bttn-create-new", createNewUser);
+	$(document.body).on("click", ".bttn-login", checkLogin);
 
 </script>
-
