@@ -1,0 +1,19 @@
+<ul>
+    {{#each members}}
+    <li>
+        <h3>{{this.name}}</h3>
+        {{#if this.char_name}}
+        <p>{{this.char_name}}</p>
+        {{else}}
+        <form data-userid="{{this.id}}">
+            <select class="form-control">
+                {{#each characters}}
+                <option>{{this.name}}</option>
+                {{/each}}
+            </select>
+            <input type="submit" class="purchaseCoupon" value="purchase">
+        </form>
+        {{/if}}
+    </li>
+    {{/each}}
+</ul>
