@@ -1,18 +1,31 @@
-<div id="modal-help" class="modal" >
-	<h3 id="help-errCode">Error # </h3>
-	<br/>
-	<hr>
-	<h4 id="help-errLine">line</h4>
-	<br/>
-	<hr>
-	<h4 id="help-errExp">explanation</h4>
+<!-- Trigger the modal with a button -->
+
+
+<div id="modal-help" class="modal" style="padding:5px !important; width:500px !important; ">
+	<!-- Modal content-->
+	<div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close close-help" data-dismiss="modal">&times;</button>
+			<h4 class="modal-title" id="help-errMsg">Error Explanation</h4>
+		</div>
+		<div class="modal-body">
+			<!-- <h4 id="help-errCode">Error Code </h4> -->
+			<!-- <h4 id="help-errMsg">message2 </h4>  -->
+			<h4 id="help-errExp">explanation </h4>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-default close-help" data-dismiss="modal">Close</button>
+		</div>
+	</div>
 </div>
+
+
 
 <div id="loginForm">
 	<h2>User Login</h2>
 	<hr>
 	<span id='loginWarning'> </span>
-	<button class='btn btn-primary bttn-help-user' id='bttn-help-user'  type='button'>?</button>
+	<div><button class='btn btn-primary bttn-help-user' data-toggle="modal" data-target="#modal-help" id='bttn-help-user' type='button'>?</button></div>
 	<br/>
 	<form action="/users/login" method="post" id="form-login">
 		<label for="user_email">User Email Address:</label>
@@ -30,8 +43,10 @@
 <div id="newUserForm">
 	<h2>Create a New Account</h2>
 	<hr>
+	<div>
 	<span id='newUserWarning'> </span>
-	<button class='btn btn-primary bttn-help-new' id='bttn-help-new' type='button'>?</button>
+	</div>
+	<div style="float:left; "><button class='btn btn-primary bttn-help-new' data-toggle="modal" data-target="#modal-help" id='bttn-help-new' type='button'>?</button></div>
 	<br/>
 	<form action="/users/create" method="post" id="form-newuser">
 		<label for="user_Name">Create a Username:</label>
@@ -60,6 +75,15 @@
 
 
 <script>
+	//global variable for the current err
+	var currErrorObj = {
+		errCode: 0,   //0 if no error
+		errLine: 0,   //which line of the input form
+		errMsg: "", //error message
+		errExp: ""   //error explanation
+	};
+
+
 	var dispHelpUser = function (_showBttn) {
 		//0 = hide the help button until an error comes in
 		//1=  show the help button
@@ -70,6 +94,7 @@
 		};
 	};
 
+
 	var dispHelpNew = function (_showBttn) {
 		//0 = hide the help button until an error comes in
 		//1=  show the help button
@@ -79,6 +104,25 @@
 			$("#bttn-help-new").css("display", "none");
 		};
 	};
+
+
+	var dispModalHelp = function () {
+		//$("#help-errCode").text("Error code: " + currErrorObj.errCode);
+		$("#help-errMsg").text(currErrorObj.errMsg);
+		$("#help-errExp").text(currErrorObj.errExp);
+		//var modTag = $("#modal-help");
+		var modTag = $("#modal-help");
+		console.log("tag = ");
+		console.log(modTag);
+		$(modTag).css("display", "block");
+		//$(modTag).css("")
+		//$(modTag).style.display="block";
+	};
+
+	var closeModalHelp = function () {
+		var modTag = $("#modal-help");
+		$(modTag).css("display", "none");
+	}
 
 	var dispNewUserForm = function () {
 		$("#newUserForm").css("display", "block");
@@ -100,14 +144,19 @@
 				user_name: $("#user_name").val(),
 				user_email: $("#register_user_email").val(),
 				user_password: $("#register_user_password").val(),
-				user_password2: $("#user_password2").val()
+				user_password2: $("#user_password_2").val()
 			},
 			function (data, status) {
 				if (data.errCode === 0) {
-					//there is an error
+					//there is no error
 					$("#newUserWarning").text(" ");
 					dispHelpNew(false);
+					window.location.href = "/group"
 				} else {
+					currErrorObj.errCode = data.errCode;
+					currErrorObj.errLine = data.errLine;
+					currErrorObj.errMsg = data.errMsg;
+					currErrorObj.errExp = data.errExp;
 					$("#newUserWarning").text(data.errMsg);
 					dispHelpNew(true);
 				};
@@ -126,10 +175,15 @@
 			},
 			function (data, status) {
 				if (data.errCode === 0) {
-					//there is an error
+					//there is no error
 					$("#loginWarning").text(" ");
 					dispHelpUser(false);
+					window.location.href = "/group"
 				} else {
+					currErrorObj.errCode = data.errCode;
+					currErrorObj.errLine = data.errLine;
+					currErrorObj.errMsg = data.errMsg;
+					currErrorObj.errExp = data.errExp;
 					$("#loginWarning").text(data.errMsg);
 					dispHelpUser(true);
 				};
@@ -144,7 +198,8 @@
 	$(document.body).on("click", ".bttn-existing", dispCurrentUserForm);
 	$(document.body).on("click", ".bttn-create-new", createNewUser);
 	$(document.body).on("click", ".bttn-login", checkLogin);
-	$(document.body).on("click", ".bttn-help-user", checkLogin);
-	$(document.body).on("click", ".bttn-help-new", checkLogin);
+	$(document.body).on("click", ".bttn-help-user", dispModalHelp);
+	$(document.body).on("click", ".bttn-help-new", dispModalHelp);
+	$(document.body).on("click", ".close-help", closeModalHelp);
 
 </script>

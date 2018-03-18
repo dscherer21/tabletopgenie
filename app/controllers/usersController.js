@@ -42,18 +42,77 @@ router.post('/login', function (req, res) {
   };
 
   var user_email = req.body.user_email;
-  user_email = user_email.toLowerCase().trim();
   var user_password = req.body.user_password;
   user_password = user_password.trim();
+
+
+  if (user_email === undefined || user_email === null) {
+    sendObjBack(12,
+      "USER EMAIL IS BLANK",
+      2,
+      "The user email is blank and needs to be in the proper format."
+    );
+    return;
+  };
+
+  user_email = user_email.toLowerCase().trim();
+  if (user_email === null || user_email === "") {
+    sendObjBack(13,
+      "USER EMAIL IS BLANK",
+      2,
+      "The user email is blank and needs to be in the proper format."
+    );
+    return;
+  };
+
+
+  //email not blank, so look if valid
+  if (user_email.indexOf("@") < 0) {
+    sendObjBack(5,
+      "USER EMAIL IS INVALID",
+      2,
+      "The user email does not have an '@' in it."
+    );
+    return;
+  };
+
+  if (user_email.indexOf(".") < 0) {
+    sendObjBack(6,
+      "USER EMAIL IS INVALID",
+      2,
+      "The user email does not have a '.' in it."
+    );
+    return;
+  };
+
+
+  if (user_password === undefined || user_password === null) {
+    sendObjBack(14,
+      "USER PASSWORD IS BLANK",
+      3,
+      "The user password can not be blank and needs to be greater than 5 characters."
+    );
+    return;
+  };
+
+  user_password = user_password.trim();
+  if (user_password === null || user_password === "") {
+    sendObjBack(15,
+      "USER PASSWORD IS BLANK",
+      3,
+      "The user password can not be blank (spaces don't count !!!) and needs to be greater than 5 characters."
+    );
+    return;
+  };
 
   var query = "SELECT * FROM users WHERE email = ?";
 
   connection.query(query, [user_email], function (err, response) {
     if (response.length == 0) {
       sendObjBack(35,
-        "no such user",
+        "NO SUCH USER",
         1,
-        "the email you have entered is not on file"
+        "The email you have entered is not on file."
       );
       return;
     };
@@ -68,9 +127,9 @@ router.post('/login', function (req, res) {
         //res.redirect('/');
       } else {
         sendObjBack(35,
-          "wrong password",
+          "WRONG PASSWORD",
           1,
-          "the password entered does not match the one on record"
+          "The password entered does not match the one on record."
         );
       }
     });
@@ -82,7 +141,7 @@ router.post('/login', function (req, res) {
 router.post('/create', function (req, res) {
   var query = "SELECT * FROM users WHERE email = ?"
   var userPassword = req.body.user_password;
-  var userPassword2 = req.body.user_password_2;
+  var userPassword2 = req.body.user_password2;
   var userName = req.body.user_name;
   var userEmail = req.body.user_email;
   var respondObj = {
@@ -103,9 +162,9 @@ router.post('/create', function (req, res) {
   //check if the user name is blank
   if (userName === undefined || userName === null) {
     sendObjBack(10,
-      "user name is blank",
+      "USER NAME IS BLANK",
       1,
-      "the user name is blank and needs a non blank name of at least 5 characters"
+      "The user name is blank and needs a non blank name of at least 5 characters."
     );
     return;
   };
@@ -113,18 +172,18 @@ router.post('/create', function (req, res) {
   userName = userName.toLowerCase().trim();
   if (userName === null || userName === "") {
     sendObjBack(11,
-      "user name is blank",
+      "USER NAME IS BLANK",
       1,
-      "the user name is blank and needs a non blank name of at least 5 characters"
+      "The user name is blank and needs a non blank name of at least 5 characters."
     );
     return;
   };
 
   if (userName.length < 5) {
     sendObjBack(1,
-      "user name is too short",
+      "USER NAME IS TOO SHORT",
       1,
-      "the user name needs at least 5 characters"
+      "The user name needs at least 5 characters."
     );
     return;
   };
@@ -132,9 +191,9 @@ router.post('/create', function (req, res) {
 
   if (userEmail === undefined || userEmail === null) {
     sendObjBack(12,
-      "user email is blank",
+      "USER EMAIL IS BLANK",
       2,
-      "the user name is blank and needs to be the proper format"
+      "The user email is blank and needs to be in the proper format."
     );
     return;
   };
@@ -142,37 +201,37 @@ router.post('/create', function (req, res) {
   userEmail = userEmail.toLowerCase().trim();
   if (userEmail === null || userEmail === "") {
     sendObjBack(13,
-      "user email is blank 2",
+      "USER EMAIL IS BLANK",
       2,
-      "the user name is blank and needs to be the proper format"
+      "The user email is blank and needs to be in the proper format."
     );
     return;
   };
 
   //email not blank, so look if valid
-  if (userEmail.indexOf(".") < 0) {
+  if (userEmail.indexOf("@") < 0) {
     sendObjBack(5,
-      "user email is invalid",
+      "USER EMAIL IS INVALID",
       2,
-      "user email does not have a '.' in it"
+      "The user email does not have an '@' in it."
     );
     return;
   };
 
-  if (userEmail.indexOf("@") < 0) {
+  if (userEmail.indexOf(".") < 0) {
     sendObjBack(6,
-      "user email is invalid",
+      "USER EMAIL IS INVALID",
       2,
-      "user email does not have an '@' in it"
+      "The user email does not have a '.' in it."
     );
     return;
   };
 
   if (userPassword === undefined || userPassword === null) {
     sendObjBack(14,
-      "user password is blank",
+      "USER PASSWORD IS BLANK",
       3,
-      "user password can not be blank and needs to be greater than 5 characters"
+      "The user password can not be blank and needs to be greater than 5 characters."
     );
     return;
   };
@@ -180,58 +239,62 @@ router.post('/create', function (req, res) {
   userPassword = userPassword.trim();
   if (userPassword === null || userPassword === "") {
     sendObjBack(15,
-      "user password is blank",
+      "USER PASSWORD IS BLANK",
       3,
-      "user password can not be blank (spaces don't count !!!) and needs to be greater than 5 characters"
+      "The user password can not be blank (spaces don't count !!!) and needs to be greater than 5 characters."
     );
     return;
   };
 
   if (userPassword.length < 5) {
     sendObjBack(9,
-      "user password is too short",
+      "USER PASSWORD IS TOO SHORT",
       3,
-      "user password needs to be at least 5 characters without leading or trailing spaces"
+      "The user password needs to be at least 5 characters without leading or trailing spaces."
     );
     return;
   };
 
   if (userPassword2 === undefined || userPassword2 === null) {
+    console.log("pass2=" + userPassword2)
     sendObjBack(16,
-      "confirming password is blank",
+      "CONFIRMING PASSWORD IS BLANK",
       4,
-      "confirming password can not be blank"
+      "The confirming password can not be blank."
     );
     return;
   };
 
   userPassword2 = userPassword2.trim();
   if (userPassword2 === null || userPassword2 === "") {
+    console.log("pass2b=" + userPassword2)
     sendObjBack(17,
-      "confirming password is blank",
+      "CONFIRMING PASSWORD IS BLANK",
       4,
-      "confirming password can not be blank and spaces don't count !"
+      "The confirming password can not be blank and spaces don't count !"
     );
     return;
   };
 
   if (userPassword != userPassword2) {
     sendObjBack(30,
-      "passwords don't match",
+      "PASSWORDS DO NOT MATCH",
       4,
-      "both passwords must match EXTACTLY including upper and lower case"
+      "Both passwords must match EXTACTLY including upper and lower case."
     );
     return;
   };
 
+  console.log("everything ok");
 
   connection.query(query, [req.body.user_email], function (err, response) {
     console.log(response)
     if (response.length > 0) {
+      console.log("email already in use");
       sendObjBack(40,
-        "email is already in use",
+        "EMAIL IS ALREADY IN USE",
         1,
-        "an account with that email has already been setup. Either sign in " +
+        "An account with that email has already been setup. Either sign in " +
         "with that account or pick another email to use"
       );
     } else {
@@ -245,7 +308,14 @@ router.post('/create', function (req, res) {
             req.session.logged_in = true;
             req.session.username = userName;
             req.session.user_email = userEmail;
-            res.redirect('/group');
+            console.log("user added to db");
+            sendObjBack(0,
+              "",
+              0,
+              ""
+            );
+            //res.redirect('/group');
+            //res.redirect('/group');
           });
         });
       });
