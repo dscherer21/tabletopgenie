@@ -37,10 +37,10 @@ router.post('/create', function (req, res) {
             var query2 = "INSERT INTO groups (name) VALUES (?)"
             connection.query(query2, [group], function (err, response) {
                 connection.query("SELECT id FROM groups WHERE name = ?", group, function (err, groupID) {
-
+                    console.log("group id: " + groupID[0].id + "user_id: " + req.session.user_id);
                     var queryAdd = "INSERT INTO user_groups (group_id, user_id) VALUES (?, ?)";
-                    connection.query(queryAdd, [groupID, req.session.user_id], function (err) {
-                        console.log("res value = " + res[0]);
+                    connection.query(queryAdd, [groupID[0].id, req.session.user_id], function (err) {
+                        
                         res.redirect('/group/create/members/' + req.body.group);
                     });
                 });
