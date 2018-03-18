@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        
+        <form class="navbar-form navbar-left" role="search">
+            <div class="form-group">
+                <label for='dates'>When would you like to play again?</label>
+                <input type="date" id='dates' class="form-control" placeholder="MM/DD/YYYY">
+                <br/>
+                <label for='meetTime'>What time?</label>
+                <input type="time" id='meetTime' class="form-control" placeholder="User Name">
+                <br/>
+                <label for='groupMembers'>Who will be there?</label>
+                <input type="text" id='groupMembers' class="form-control" placeholder="User Name">
+                <br/>
+                <label for='meetPlace'>Where will you meet?</label>
+                <input type="location" id='meetPlace' class="form-control" placeholder="Location">
+            </div>
+            <button type="submit" id='createEvent' class="btn btn-primary">Add Event to Calendar</button>
+          </form>
+
+          <script>
+              var url = 'https://www.googleapis.com/calendar/v3/calendars/[MY_CALENDAR_ID]/events?sendNotifications=false&access_token=[GOOGLE_API_TOKEN]';
+            var data = { end: { dateTime: "2012-07-22T11:30:00-07:00" }
+                            , start: { dateTime: "2012-07-22T11:00:00-07:00" }
+                            , summary: "New Calendar Event from API"
+                        };
+
+            var ajax = $.ajax({ url: url
+                                , data: data
+                                , type: 'POST'
+                        }).done(addEventDone)
+                          .fail(function (jqHXR, textStatus) {
+                              console.log("addEvent(): ajax failed = " + jqHXR.responseText);
+                              console.log(jqHXR);
+                          });
+          </script>
+        
+    </body>
+</html>

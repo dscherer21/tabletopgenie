@@ -8,3 +8,5 @@ A database application to store Star Wars Imperial Assault character data and sc
 - Mrerlander
 
 Demo video here: 'https://www.youtube.com/watch?v=lFUkS6UvK3o#action=share'
+
+![Demo](app/public/images/genieScreenshot.png)

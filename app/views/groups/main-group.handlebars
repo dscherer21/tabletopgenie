@@ -1,6 +1,8 @@
+{{#if logged_in}}
+
 {{#each groups}}
 <br>
-<a class="btn" href="/groups/campaign" role="button" data-group="{{this.group_id}}">{{this.name}}</a>
+<a class="btn btn-primary" href="/groups/campaign" role="button" data-group="{{this.group_id}}">{{this.name}}</a>
 {{/each}}
 
 <form action="/group/create" method="post" id="form">
@@ -8,3 +10,7 @@
 		<br>
 		<input type="submit" id="submitButton" value="Create New Group">
 	</form>
+
+    {{else}}
+    <p>Please login to create a new group</p>
+{{/if}}
