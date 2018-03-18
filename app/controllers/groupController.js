@@ -2,12 +2,8 @@ var express = require('express');
 var router = express.Router();
 var connection = require('../config/connection.js');
 
-router.get('/new', function (req, res) {
-    res.render('../app/views/groups/new');
-});
-
 router.get('/', function (req, res) {
-    var query = "SELECT ug.*, g.group_id FROM groups g LEFT JOIN user_groups ug ON g.id = ug.group_id WHERE ug.user_id = ?";
+    var query = "SELECT ug.*, g.id, g.name FROM groups g LEFT JOIN user_groups ug ON g.id = ug.group_id WHERE ug.user_id = ?"
     connection.query(query, [req.session.user_id], function (err, groups) {
 
         res.render('../app/views/groups/main-group', {
@@ -58,9 +54,10 @@ router.post('/create/users', function (req, res) {
         if (response.length > 0) {
             var groupQuery = "SELECT id FROM groups WHERE name = ?";
             connection.query(groupQuery, req.body.group, function (err, res2) {
-console.log(res2);
+
                 var groupID = res2[0].id;
                 var query = "INSERT INTO user_groups (group_id, user_id) VALUES (?, ?)";
+                
                 connection.query(query, [groupID, userID], function (err, res3) {
                     console.log("user added to usergroup");
                 });
