@@ -17,26 +17,31 @@ router.get('/', function (req, res) {
     });
 });
 
-router.get('/create/members', function (req, res) {
-    res.render('../app/views/groups/add-members');
+router.get('/create/members/:group', function (req, res) {
+    var group = req.params.group
+    res.render('../app/views/groups/add-members', {
+        group: group
+    });
 });
 
 router.post('/create', function (req, res) {
+    var group = req.body.group;
     var query = "SELECT * FROM groups WHERE name = ?"
-
-    connection.query(query, [req.body.group], function (err, response) {
+    console.log(req.session.user_id);
+    connection.query(query, [group], function (err, response) {
         console.log(response)
         if (response.length > 0) {
             res.send('There is already a group with that name.');
         } else {
 
             var query2 = "INSERT INTO groups (name) VALUES (?)"
-            connection.query(query2, [req.body.group], function (err, response) {
-                var queryAdd = "INSERT INTO user_groups (group_id, user_id) VALUES (?, ?)";
-                connection.query(queryAdd, [req.body.group, req.session.user_id], function (err, res) {
+            connection.query(query2, [group], function (err, response) {
+                connection.query("SELECT id FROM groups WHERE name = ?", group, function (err, groupID) {
 
-                    res.redirect('/group/create/members', {
-                        group: req.body.group
+                    var queryAdd = "INSERT INTO user_groups (group_id, user_id) VALUES (?, ?)";
+                    connection.query(queryAdd, [groupID, req.session.user_id], function (err) {
+                        console.log("res value = " + res[0]);
+                        res.redirect('/group/create/members/' + req.body.group);
                     });
                 });
             });
@@ -45,17 +50,24 @@ router.post('/create', function (req, res) {
 });
 
 router.post('/create/users', function (req, res) {
-    var userID = "";
     var userQuery = "SELECT id FROM users WHERE email = ?";
-
+    
     connection.query(userQuery, [req.body.email], function (err, response) {
-        userID = response;
-        console.log(response);
-
-        var query = "INSERT INTO user_groups (group_id, user_id) VALUES (?, ?)";
-        connection.query(query, [req.body.group, userID], function (err) {
-            console.log(err);
-        });
+        var userID = response[0].id;
+        
+        if (response.length > 0) {
+            var groupQuery = "SELECT id FROM groups WHERE name = ?";
+            connection.query(groupQuery, req.body.group, function (err, res2) {
+console.log(res2);
+                var groupID = res2[0].id;
+                var query = "INSERT INTO user_groups (group_id, user_id) VALUES (?, ?)";
+                connection.query(query, [groupID, userID], function (err, res3) {
+                    console.log("user added to usergroup");
+                });
+            });
+        } else {
+            res.send("That user does not exist");
+        }
     });
 });
 
