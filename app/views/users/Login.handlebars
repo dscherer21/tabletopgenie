@@ -127,12 +127,14 @@
 	var dispNewUserForm = function () {
 		$("#newUserForm").css("display", "block");
 		$("#loginForm").css("display", "none");
+		$("#newUserWarning").text(" ");
 		dispHelpNew(false);
 	};
 
 	var dispCurrentUserForm = function () {
 		$("#newUserForm").css("display", "none");
 		$("#loginForm").css("display", "block");
+		$("#loginWarning").text(" ");
 		dispHelpUser(false);
 	};
 
