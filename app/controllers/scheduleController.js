@@ -8,9 +8,9 @@ console.log('schedule controller is loaded...');
 //this is the picture_controller.js file
 //really /picture
 router.get('/', function(req,res) {
-    res.render('schedule/main');
+    console.log("hit the main schedule page");
+    res.render('../app/views/schedule/main');
 });
 
 
-console.log('schedule controller is done loading ...');
 module.exports = router;
