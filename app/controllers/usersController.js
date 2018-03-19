@@ -21,7 +21,7 @@ router.get('/log-in', function (req, res) {
   res.render('../app/views/users/login');
 });
 
-router.get('/sign-out', function (req, res) {
+router.get('/log-out', function (req, res) {
   req.session.destroy(function (err) {
     res.redirect('/');
   });
@@ -315,15 +315,22 @@ router.post('/create', function (req, res) {
           connection.query(query, [userName, userEmail, hash], function (err, response) {
             //need to add error 
             console.log(err);
-            req.session.logged_in = true;
-            req.session.username = userName;
-            req.session.user_email = userEmail;
-            console.log("user added to db");
-            sendObjBack(0,
-              "",
-              0,
-              ""
-            );
+            //now need to requery to make sure that the user just entered to get the user id
+            var query = "SELECT * FROM users WHERE email = ?";
+
+            connection.query(query, [userEmail], function (err, response) {
+              req.session.user_id = response[0].id;
+              req.session.logged_in = true;
+              req.session.username = userName;
+              req.session.user_email = userEmail;
+              console.log("user added to db");
+              sendObjBack(0,
+                "",
+                0,
+                ""
+              );
+              //query to re-read the current user to get their id
+            });
           });
         });
       });
