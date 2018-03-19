@@ -1,18 +1,17 @@
 {{#if logged_in}}
-{{#if group_exists}}
-<h3>That group already exists. Please choose another name.</h3>
-{{/if}}
-{{#each groups}}
-<br>
-<a class="btn btn-primary" href="/campaign/{{this.name}}" role="button" data-group="{{this.group_id}}">{{this.name}}</a>
-{{/each}}
-
-<form action="/group/create" method="post" id="form">
+	<h2>{{user_name}}'s Groups:</h2>
+	{{#each groups}}
+	<br>
+	<a href="/campaign/{{this.name}}" role="button" data-group="{{this.group_id}}"><h3>{{this.name}}</h3></a>
+	<br> 
+	{{/each}}
+	<br>
+	<form action="/group/create" method="post" id="form">
 		<input type="text" name="group" placeholder="group name">
 		<br>
 		<input type="submit" id="submitButton" value="Create New Group">
 	</form>
 
-    {{else}}
+{{else}}
     <p>Please login to create a new group</p>
 {{/if}}

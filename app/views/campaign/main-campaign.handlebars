@@ -1,20 +1,51 @@
+<h2>Welcome to group {{group}}!</h2>
+<br/>
 <ul>
     {{#members}}
     <li>
         <h3>{{name}}</h3>
         {{#if char_name}}
-        <p>{{char_name}}</p>
+            <p>{{char_name}}</p>
         {{else}}
-        <form action="/campaign/{{../group}}/characters/" method="post">
-        <input type="hidden" name="memid" value="{{id}}">
-            <select name="charid" class="form-control">
+            <form action="/campaign/{{../group}}/characters/" method="post">
+                <input type="hidden" name="memid" value="{{id}}">
+                <select name="charid" class="form-control">
                 {{#../characters}}
                 <option value="{{id}}">{{name}}</option>
                 {{/../characters}}
-            </select>
-            {{/if}}
-         {{/members}}
-            <input type="submit" value="Choose Characters">
-        </form>
+                </select>
+        {{/if}}
+    {{/members}}
+                <input type="submit" value="Choose Characters">
+            </form>
     </li>
 </ul>
+<br/>
+<!--Home Page Button-->
+<button class='btn btn-primary' >Home</button>
+<br/>
+<br/>
+<!--Delete Group Button-->
+<button class='btn btn-danger' id='deleteGroup'>Delete Group</button>
+
+
+<div class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Warning!!</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure?</p>
+        <p>Clicking "Delete" will delete your group?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger">Delete</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Exit</button>
+      </div>
+    </div>
+  </div>
+</div>

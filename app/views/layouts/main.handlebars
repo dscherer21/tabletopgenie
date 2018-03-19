@@ -35,9 +35,14 @@
                 <div class="col-xs-4">
                     <h1 class='specialFont'>TableTop Genie</h1>
                 </div>
-				<!--Log In-->
+				<!--Logged In Area-->
                 <div class="col-xs-4">
-                    <a href='/users/log-in'><h3>Log In</h3></a>
+                    {{#if logged_in}}
+                        <h4>Hello, {{user_name}}!</h4>
+                        <a href='/users/log-out'><h4>Log out</h4></a>
+                    {{else}}
+                        <a href='/users/log-in'><h3>Log In</h3></a>
+                    {{/if}}
                 </div>
             </div>
         </header>
@@ -52,11 +57,12 @@
         <!-- <footer class="container"> -->
             <div class="text-center navbar navbar-fixed-bottom" id='footer'>
                 <div class="container-fluid">
+                    <br/>
                     <span id='copyright'>© 2018 Copyright</span>
                 </div>
             </div>
         <!-- </footer> -->
-
+        
     </body>
 </html>
 
