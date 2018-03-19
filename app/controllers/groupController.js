@@ -8,7 +8,8 @@ router.get('/', function (req, res) {
 
         res.render('../app/views/groups/main-group', {
             groups: groups,
-            logged_in: req.session.logged_in
+            logged_in: req.session.logged_in,
+            user_name: req.session.userName
         });
     });
 });
@@ -36,7 +37,6 @@ router.post('/create', function (req, res) {
                     console.log("group id: " + groupID[0].id + "user_id: " + req.session.user_id);
                     var queryAdd = "INSERT INTO user_groups (group_id, user_id) VALUES (?, ?)";
                     connection.query(queryAdd, [groupID[0].id, req.session.user_id], function (err) {
-                        
                         res.redirect('/group/create/members/' + req.body.group);
                     });
                 });
