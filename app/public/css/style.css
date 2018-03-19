@@ -47,6 +47,16 @@ footer {
     padding: 10px;
 }
 
+.btn-info {
+    background-color:rgba(0,0,0,0);
+    border: none;
+    color: black;
+}
+
+.warning {
+    display: inline-flex;
+  }
+
 .specialFont {
     font-family: 'Berkshire Swash', cursive;
 }
@@ -68,10 +78,6 @@ footer {
     text-decoration: underline overline;
     font-weight: bold;
     font-size: 32px;
-}
-
-#warning {
-  display: inline-flex;
 }
 
 #copyright {
