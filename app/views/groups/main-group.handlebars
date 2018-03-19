@@ -1,5 +1,5 @@
 {{#if logged_in}}
-	<h2>Your Groups:</h2>
+	<h2>{{user_name}}'s Groups:</h2>
 	{{#each groups}}
 	<br>
 	<a href="/campaign/{{this.name}}" role="button" data-group="{{this.group_id}}"><h3>{{this.name}}</h3></a>
