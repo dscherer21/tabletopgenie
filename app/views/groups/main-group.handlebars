@@ -1,5 +1,7 @@
 {{#if logged_in}}
-
+{{#if group_exists}}
+<h3>That group already exists. Please choose another name.</h3>
+{{/if}}
 {{#each groups}}
 <br>
 <a class="btn btn-primary" href="/campaign/{{this.name}}" role="button" data-group="{{this.group_id}}">{{this.name}}</a>

@@ -4,5 +4,11 @@
     <br>
     <input type="submit" id="submitButton" value="Add New User">
 </form>
-
+{{#if exists}}
+{{#each user_emails}}
+<p>{{this.email}}</p>
+{{/each}}
+{{else}}
+<p>That user does not exist.</p>
+{{/if}}
 <a class="btn" href="/campaign/{{this.group}}" role="button">Finish and go to group</a>
