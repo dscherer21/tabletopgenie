@@ -61,7 +61,7 @@ CREATE TABLE session (
     id INT NOT NULL AUTO_INCREMENT,
     credits INT,
     picture VARCHAR(255),
-    game_date VARCHAR(30),
+    game_date_unix INT(13),
     primary key (id)
 );
 

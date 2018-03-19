@@ -10,6 +10,8 @@ console.log('schedule controller is loaded...');
 router.get('/', function(req,res) {
     console.log("hit the main schedule page");
     res.render('../app/views/schedule/main');
+    console.log (req.session.user_id);
+    console.log( req.session.username);
 });
 
 
