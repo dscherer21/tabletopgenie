@@ -5,6 +5,10 @@ var mysql = require('mysql');
 var connection = require('../config/connection.js');
 
 
+//hack attack should look for 
+//  <, >, !, &, /, \, '
+
+
 console.log('users controller is loaded..');
 
 //this is the users_controller.js file
@@ -19,9 +23,10 @@ router.get('/log-in', function (req, res) {
 
 router.get('/sign-out', function (req, res) {
   req.session.destroy(function (err) {
-    res.redirect('/')
-  })
+    res.redirect('/');
+  });
 });
+
 
 
 //if user trys to sign in with the wrong password or email tell them that on the page
@@ -123,8 +128,13 @@ router.post('/login', function (req, res) {
         req.session.user_email = response[0].email;
         req.session.username = response[0].name;
 
-        res.redirect('/group');
-        //res.redirect('/');
+        //send object back with error code = 0
+        //means everything passed
+        sendObjBack(0,
+          "",
+          0,
+          ""
+        );
       } else {
         sendObjBack(35,
           "WRONG PASSWORD",
@@ -269,7 +279,7 @@ router.post('/create', function (req, res) {
   if (userPassword2 === null || userPassword2 === "") {
     console.log("pass2b=" + userPassword2)
     sendObjBack(17,
-      "PLEASE CONFIRM PASSWORD",
+      "CONFIRMING PASSWORD IS BLANK",
       4,
       "The confirming password can not be blank and spaces don't count !"
     );
@@ -303,7 +313,7 @@ router.post('/create', function (req, res) {
           var query = "INSERT INTO users (name, email, password_hash ) VALUES (?, ?, ? )"
 
           connection.query(query, [userName, userEmail, hash], function (err, response) {
-            //need to add error
+            //need to add error 
             console.log(err);
             req.session.logged_in = true;
             req.session.username = userName;
@@ -314,8 +324,6 @@ router.post('/create', function (req, res) {
               0,
               ""
             );
-            //res.redirect('/group');
-            //res.redirect('/group');
           });
         });
       });
@@ -324,6 +332,5 @@ router.post('/create', function (req, res) {
 });
 
 
-
-
 module.exports = router;
+

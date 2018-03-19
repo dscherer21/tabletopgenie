@@ -67,6 +67,7 @@ var usersController = require("./app/controllers/usersController.js");
 var campaignController = require("./app/controllers/campaignController.js");
 var scheduleController = require("./app/controllers/scheduleController.js");
 
+console.log('all controllers loaded');
 
 //prepends all the paths
 app.use("/", applicationController);
