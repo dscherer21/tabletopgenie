@@ -5,15 +5,16 @@
         {{#if char_name}}
         <p>{{char_name}}</p>
         {{else}}
-        <form data-userid="{{id}}">
-            <select class="form-control">
+        <form action="/campaign/{{../group}}/characters/" method="post">
+        <input type="hidden" name="memid" value="{{id}}">
+            <select name="charid" class="form-control">
                 {{#../characters}}
                 <option value="{{id}}">{{name}}</option>
                 {{/../characters}}
             </select>
-            <input type="submit" value="Choose Character">
+            {{/if}}
+         {{/members}}
+            <input type="submit" value="Choose Characters">
         </form>
-        {{/if}}
     </li>
-    {{/members}}
 </ul>

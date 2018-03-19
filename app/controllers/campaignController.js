@@ -13,12 +13,32 @@ router.get("/:group", function (req, res) {
 
 
             res.render("../app/views/campaign/main-campaign", {
+                group: req.params.group,
                 members: members,
                 characters: characters
             });
         });
     });
 });
+
+router.post("/:group/characters", function (req, res){
+    var userIDs = req.body.memid;
+    var charIDs = req.body.charid;
+    console.log(userIDs);
+    console.log(charIDs);
+    console.log(userIDs.length);
+
+    var query = "INSERT INTO user_groups (character_id) VALUES (?) WHERE user_id = (?)";
+    for (var i = 0; i < userIDs.length; i++){
+        var charID = parseInt(charIDs[i]);
+        var userID = parseInt(userIDs[i]);
+        connection.query(query, [charID, userID], function (err, response){
+            console.log("added char id " + charID + " to user id " + userID);
+        })
+    }
+
+
+})
 
 
 
