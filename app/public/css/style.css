@@ -70,6 +70,10 @@ footer {
     font-size: 32px;
 }
 
+#warning {
+  display: inline-flex;
+}
+
 #copyright {
     color: rgba(255, 255, 255, .6);
 }
@@ -87,7 +91,7 @@ footer {
 }
 
 @media screen and (max-width: 375px) {
-    
+
     h1 {
         font-size: 30px;
     }

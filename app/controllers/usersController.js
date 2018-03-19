@@ -269,7 +269,7 @@ router.post('/create', function (req, res) {
   if (userPassword2 === null || userPassword2 === "") {
     console.log("pass2b=" + userPassword2)
     sendObjBack(17,
-      "CONFIRMING PASSWORD IS BLANK",
+      "PLEASE CONFIRM PASSWORD",
       4,
       "The confirming password can not be blank and spaces don't count !"
     );
@@ -303,7 +303,7 @@ router.post('/create', function (req, res) {
           var query = "INSERT INTO users (name, email, password_hash ) VALUES (?, ?, ? )"
 
           connection.query(query, [userName, userEmail, hash], function (err, response) {
-            //need to add error 
+            //need to add error
             console.log(err);
             req.session.logged_in = true;
             req.session.username = userName;

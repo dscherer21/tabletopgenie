@@ -1,4 +1,4 @@
-<!-- Trigger the modal with a button -->
+<!-- Trigger the modal with the ? button -->
 
 
 <div id="modal-help" class="modal" style="padding:5px !important; width:500px !important; ">
@@ -20,12 +20,15 @@
 </div>
 
 
-
+<!--Log In Form-->
 <div id="loginForm">
 	<h2>User Login</h2>
 	<hr>
-	<span id='loginWarning'> </span>
-	<div><button class='btn btn-primary bttn-help-user' data-toggle="modal" data-target="#modal-help" id='bttn-help-user' type='button'>?</button></div>
+	<div id='warning'>
+		<div id='loginWarning'></div>
+		<!--Help Button-->
+		<button class='btn btn-primary bttn-help-user' data-toggle="modal" data-target="#modal-help" id='bttn-help-user' type='button'>?</button>
+	</div>
 	<br/>
 	<form action="/users/login" method="post" id="form-login">
 		<label for="user_email">User Email Address:</label>
@@ -69,8 +72,8 @@
 <hr>
 <hr>
 
-<!-- 
-	<script type="text/javascript" src="../../javascript/login.js"></script>  
+<!--
+	<script type="text/javascript" src="../../javascript/login.js"></script>
 -->
 
 
