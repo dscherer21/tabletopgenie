@@ -24,10 +24,10 @@
 <div id="loginForm">
 	<h2>User Login</h2>
 	<hr>
-	<div id='warning'>
+	<div class='warning'>
 		<div id='loginWarning'></div>
 		<!--Help Button-->
-		<button class='btn btn-primary bttn-help-user' data-toggle="modal" data-target="#modal-help" id='bttn-help-user' type='button'>?</button>
+		<button class='btn btn-info bttn-help-user' data-toggle="modal" data-target="#modal-help" id='bttn-help-user' type='button'>?</button>
 	</div>
 	<br/>
 	<form action="/users/login" method="post" id="form-login">
@@ -43,13 +43,15 @@
 	</form>
 	<hr>
 </div>
+
+<!--New User Form-->
 <div id="newUserForm">
 	<h2>Create a New Account</h2>
 	<hr>
-	<div>
-	<span id='newUserWarning'> </span>
+	<div class='warning'>
+		<div id='newUserWarning'> </div>
+		<button class='btn btn-info bttn-help-new' data-toggle="modal" data-target="#modal-help" id='bttn-help-new' type='button'>?</button>
 	</div>
-	<div style="float:left; "><button class='btn btn-primary bttn-help-new' data-toggle="modal" data-target="#modal-help" id='bttn-help-new' type='button'>?</button></div>
 	<br/>
 	<form action="/users/create" method="post" id="form-newuser">
 		<label for="user_Name">Create a Username:</label>
