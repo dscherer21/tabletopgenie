@@ -1,28 +1,34 @@
 <h2>Welcome to group {{group}}!</h2>
 <br/>
+<h3>Group Members: {{#members}}{{name}},{{/members}}</h3>
 <ul>
     {{#members}}
     <li>
         <h3>{{name}}</h3>
         {{#if char_name}}
-            <p>{{char_name}}</p>
+        <p>{{char_name}}</p>
         {{else}}
-            <form action="/campaign/{{../group}}/characters/" method="post">
-                <input type="hidden" name="memid" value="{{id}}">
-                <select name="charid" class="form-control">
+        <form id="campaign-form" action="/campaign/{{../group}}/characters/" method="post">
+            <input type="hidden" name="memid" class="memid" value="{{id}}">
+            <select name="charid{{id}}" class="charid form control">
                 {{#../characters}}
                 <option value="{{id}}">{{name}}</option>
                 {{/../characters}}
-                </select>
-        {{/if}}
-    {{/members}}
-                <input type="submit" value="Choose Characters">
-            </form>
+            </select>
+            {{/if}} {{/members}}
+            <input type="submit" class="character-submit" value="Choose Characters">
+        </form>
     </li>
 </ul>
 <br/>
-<!--Home Page Button-->
-<button class='btn btn-primary' >Home</button>
+<div class='row'>
+  <!--Home Page Button-->
+  <a href='/group'><button class='btn btn-primary' id='homeButton'>Home</button></a>
+  <!--Add Members Page-->
+  <a href='/group/create/members/{{group}}'><button class='btn btn-primary' id='addMembers'>Add Members</button></a>
+  <!--Do Something Button-->
+  <a href='/schedule/{{group_id}}'><button class ='btn btn-primary' id='schedulerButton'>Schedule a Time</button></a>
+</div>
 <br/>
 <br/>
 <!--Delete Group Button-->
@@ -30,10 +36,31 @@
 
 
 <div class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Warning!!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure?</p>
+                <p>Clicking "Delete" will delete your group?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger">Delete</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Exit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id='deleteGroupModal'>
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Warning!!</h5>
+        <h2 class="modal-title">Warning!!</h2>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -43,9 +70,58 @@
         <p>Clicking "Delete" will delete your group?</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger">Delete</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Exit</button>
+        <button type="button" class="btn btn-danger" id='confirmGroupDelete'>Delete</button>
+        <button type="button" id='exitButton' class="btn btn-secondary" data-dismiss="modal">Exit</button>
       </div>
     </div>
   </div>
 </div>
+
+<script>
+
+    $(document.body).on("submit", "#campaign-form", function (event) {
+        event.preventDefault();
+        var url = ($(this).attr("action"));
+        var formVals = ($(this).serializeArray());
+        var charIDs = [];
+        var memIDs = [];
+
+        for (var i = 0; i < formVals.length; i++) {
+            if (i % 2 === 0) {
+                memIDs.push(formVals[i].value);
+            } else {
+                charIDs.push(formVals[i].value);
+            }
+        }
+
+        console.log(charIDs);
+        console.log(memIDs);
+
+        $.post(url, {
+            memids: memIDs,
+            charids: charIDs,
+            group_name: $("#group").val()
+        }, function (data, success) {
+            console.log(data);
+            window.location.href = data.url;
+        });
+    });
+  //Delete Group Button
+$('#deleteGroup').on('click', function() { 
+    $("#deleteGroupModal").attr("display","initial");
+});
+//Exit Button
+$('#exitButton').on('click', function() { 
+    $("#deleteGroupModal").attr("display","none");
+});
+//Add Member Button
+$('#addMember').on('click', function() {
+
+});
+//Modal Delete Group Button
+/*$('#confirmGroupDelete').on('click', function() {
+  $.ajax({data: "group_id", success: function(result){
+        $("#div1").html(result);
+  }});
+});*/
+</script>

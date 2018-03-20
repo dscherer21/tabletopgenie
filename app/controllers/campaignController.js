@@ -8,12 +8,13 @@ router.get("/:group", function (req, res) {
 
     connection.query(query, [req.params.group], function (err, members) {
         var charQuery = "SELECT * FROM characters";
-
+        console.log(members);
         connection.query(charQuery, function (err, characters) {
-
 
             res.render("../app/views/campaign/main-campaign", {
                 group: req.params.group,
+                logged_in: req.session.logged_in,
+                user_name: req.session.username,
                 members: members,
                 characters: characters
             });
@@ -21,10 +22,85 @@ router.get("/:group", function (req, res) {
     });
 });
 
-router.post("/:group/characters", function (req, res) {
-    var userIDs = req.body.memid;
-    var charIDs = req.body.charid;
+router.get("/:group/main", function (req, res) {
+    var groupQ = "SELECT id FROM groups WHERE name = ?";
+    connection.query(groupQ, [req.params.group], function (err, id) {
+        var groupID = parseInt(id[0].id);
 
+        var ugQuery = "SELECT ug.*, c.name FROM user_groups ug LEFT JOIN characters c ON c.id = ug.character_id WHERE group_id = ?";
+        connection.query(ugQuery, [groupID], function (err, groupInfo) {
+
+            var cQuery = "SELECT * FROM characters";
+            connection.query(cQuery, function (err, chars) {
+                var cardQuery = "SELECT * FROM cards";
+                connection.query(cardQuery, function (err, cards) {
+                    var missionCards = [];
+                    var deploymentCards = [];
+                    var commandCards = [];
+                    var rewardCards = [];
+                    var itemCards = [];
+                    var supplyCards = [];
+                    var classCards = [];
+
+                    for (var i = 0; i < cards.length; i++) {
+                        switch (cards[i].type) {
+                            case "Story Mission":
+                                missionCards.push(cards[i]);
+                                break;
+
+                            case "Side Mission":
+                                missionCards.push(cards[i]);
+                                break;
+
+                            case "Deployment":
+                                deploymentCards.push(cards[i]);
+                                break;
+
+                            case "Command":
+                                commandCards.push(cards[i]);
+                                break;
+
+                            case "Reward":
+                                rewardCards.push(cards[i]);
+                                break;
+
+                            case "item":
+                                itemCards.push(cards[i]);
+                                break;
+
+                            case "supply":
+                                supplyCards.push(cards[i]);
+                                break;
+
+                            case "class":
+                                classCards.push(cards[i]);
+                                break;
+                        }
+                    };
+
+                    res.render("../app/views/campaign/show-campaign", {
+                        group: req.params.group,
+                        groupInfo: groupInfo,
+                        characters: chars,
+                        missionCards: missionCards,
+                        deploymentCards: deploymentCards,
+                        commandCards: commandCards,
+                        itemCards: itemCards,
+                        supplyCards: supplyCards,
+                        classCards: classCards,
+                    });
+                });
+            });
+        });
+    });
+});
+
+router.post("/:group/characters", function (req, res) {
+    var userIDs = req.body.memids;
+    var charIDs = req.body.charids;
+    console.log(userIDs);
+    console.log(charIDs);
+    console.log(req.params.group);
     var groupQ = "SELECT id FROM groups WHERE name = ?";
     connection.query(groupQ, [req.params.group], function (err, id) {
         var groupID = parseInt(id[0].id);
@@ -41,7 +117,7 @@ router.post("/:group/characters", function (req, res) {
                     charAdd();
                 } else {
                     var empireQuery = "UPDATE user_groups SET empire = true WHERE character_id = 7";
-                    connection.query(empireQuery, function(err, empResponse){
+                    connection.query(empireQuery, function (err, empResponse) {
                         console.log("empire update");
                     })
                 }
@@ -49,13 +125,15 @@ router.post("/:group/characters", function (req, res) {
         }
         charAdd();
     });
+    res.json({
+        url: "/campaign/" + req.params.group + "/main"
+    });
+});
 
-})
-
-
-
-
-
-
+//Function to remove Groups from Database
+/*var query = 'REMOVE FROM groups WHERE group_id=?'
+connection.query(query, [req.body.groups], function (err, response) {
+    throw err;
+});*/
 
 module.exports = router;

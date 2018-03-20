@@ -1,0 +1,44 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-xs-12 panel panel-default">
+            <form id="group-cards-form">
+                <input type="hidden" name="group" id="group" value="{{this.group}}">
+                <select name="mission" id="mission" class="form-control">
+                    <option disabled>Mission Cards</option>
+                    {{#missionCards}}
+                    <option value="mission{{id}}">{{name}} {{type}}</option>
+                    {{/missionCards}}
+                </select>
+                <br>
+                <select multiple name="allies" id="allies" class="form-control">
+                    <option disabled>Deployment Cards</option>
+                    {{#deploymentCards}} {{#if empire}} {{else}}
+                    <option value="deployment{{id}}">{{name}}</option>
+                    {{/if}} {{/deploymentCards}}
+                </select>
+            </form>
+            <br>
+            <input type="text" name="credits" id="credits" placeholder="credits">
+            <br>
+            <br>
+            <input type="submit" id="submitButton" value="Update Mission, Deployments, and Credits">
+            </form> <!--post to group_cards-->
+        </div>
+
+        <div class="col-md-6 col-xs-12 panel panel-default">
+            <h3 id="current-mission"></h3>
+            <h3 id="current-deployments"></h3>
+            <h3 id="current-credits"></h3>
+
+        </div>
+    </div>
+    {{!-- <div class="row">
+        {{#groupInfo}}
+        <div class="col-xs-3">
+            <h4>{{name}}</h4>
+            <form id="user{{user_id}}"
+                <select ></form>
+
+        </div>
+    </div> --}}
+</div>
