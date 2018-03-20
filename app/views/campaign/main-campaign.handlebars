@@ -1,6 +1,6 @@
 <h2>Welcome to group {{group}}!</h2>
 <br/>
-<h3>Group Members: {{#members}}{{name}},{{/members}}</h3>
+<h3>Group Members: {{#members}}{{name}}, {{/members}}</h3>
 <ul>
     {{#members}}
     <li>
@@ -15,13 +15,16 @@
                 <option value="{{id}}">{{name}}</option>
                 {{/../characters}}
             </select>
-            {{/if}} {{/members}}
+            {{/if}}
+            {{/members}}
             <input type="submit" class="character-submit" value="Choose Characters">
         </form>
     </li>
 </ul>
 <br/>
 <div class='row'>
+  <!--Go to group if members are set-->
+  <a href='/campaign/{{group}}/main'><button class='btn btn-primary' id='campaignButton'>Go to Group</button></a>
   <!--Home Page Button-->
   <a href='/group'><button class='btn btn-primary' id='homeButton'>Home</button></a>
   <!--Add Members Page-->
@@ -57,24 +60,24 @@
 </div>
 
 <div class="modal" tabindex="-1" role="dialog" id='deleteGroupModal'>
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2 class="modal-title">Warning!!</h2>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p>Are you sure?</p>
-        <p>Clicking "Delete" will delete your group?</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" id='confirmGroupDelete'>Delete</button>
-        <button type="button" id='exitButton' class="btn btn-secondary" data-dismiss="modal">Exit</button>
-      </div>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Warning!!</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure?</p>
+                <p>Clicking "Delete" will delete your group?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" id='confirmGroupDelete'>Delete</button>
+                <button type="button" id='exitButton' class="btn btn-secondary" data-dismiss="modal">Exit</button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 <script>
@@ -106,18 +109,18 @@
             window.location.href = data.url;
         });
     });
-  //Delete Group Button
-$('#deleteGroup').on('click', function() { 
-    $("#deleteGroupModal").attr("display","initial");
-});
-//Exit Button
-$('#exitButton').on('click', function() { 
-    $("#deleteGroupModal").attr("display","none");
-});
-//Add Member Button
-$('#addMember').on('click', function() {
+    //Delete Group Button
+    $('#deleteGroup').on('click', function () {
+        $("#deleteGroupModal").attr("display", "initial");
+    });
+    //Exit Button
+    $('#exitButton').on('click', function () {
+        $("#deleteGroupModal").attr("display", "none");
+    });
+    //Add Member Button
+    $('#addMember').on('click', function () {
 
-});
+    });
 //Modal Delete Group Button
 /*$('#confirmGroupDelete').on('click', function() {
   $.ajax({data: "group_id", success: function(result){

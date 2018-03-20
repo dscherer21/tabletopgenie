@@ -21,7 +21,6 @@ CREATE TABLE groups (
 CREATE TABLE characters (
     id INT NOT NULL AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL,
-    xp INT,
     primary key (id)
 );
 
@@ -51,6 +50,7 @@ CREATE TABLE character_cards (
     user_id INT,
     character_id INT,
     card_id INT,
+    xp INT,
     foreign key (character_id) references characters(id),
     foreign key (group_id) references groups(id),
     foreign key (user_id) references users(id),

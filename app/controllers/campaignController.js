@@ -88,6 +88,7 @@ router.get("/:group/main", function (req, res) {
                         itemCards: itemCards,
                         supplyCards: supplyCards,
                         classCards: classCards,
+                        rewardCards: rewardCards
                     });
                 });
             });
