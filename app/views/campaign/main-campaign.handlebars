@@ -1,6 +1,6 @@
 <h2>Welcome to group {{group}}!</h2>
 <br/>
-<h3>Group Members: </h3>
+<h3>Group Members: {{#members}}{{name}},{{/members}}</h3>
 <ul>
     {{#members}}
     <li>
@@ -23,14 +23,12 @@
 </ul>
 <br/>
 <div class='row'>
-    <!--Home Page Button-->
-    <a href='/group'>
-        <button class='btn btn-primary' id='homeButton'>Home</button>
-    </a>
-    <!--Add Members Page-->
-    <a href='/group/create/members/{{group}}'>
-        <button class='btn btn-primary' id='addMembers'>Add Members</button>
-    </a>
+  <!--Home Page Button-->
+  <a href='/group'><button class='btn btn-primary' id='homeButton'>Home</button></a>
+  <!--Add Members Page-->
+  <a href='/group/create/members/{{group}}'><button class='btn btn-primary' id='addMembers'>Add Members</button></a>
+  <!--Do Something Button-->
+  <a href='/schedule/{{group_id}}'><button class ='btn btn-primary' id='schedulerButton'>Schedule a Time</button></a>
 </div>
 <br/>
 <br/>
