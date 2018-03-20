@@ -22,7 +22,8 @@
             <br>
             <br>
             <input type="submit" id="submitButton" value="Update Mission, Deployments, and Credits">
-            </form> <!--post to group_cards-->
+            </form>
+            <!--post to group_cards-->
         </div>
 
         <div class="col-md-6 col-xs-12 panel panel-default">
@@ -32,13 +33,45 @@
 
         </div>
     </div>
-    {{!-- <div class="row">
-        {{#groupInfo}}
+    <div class="row">
+        {{#groupInfo}} {{#if empire}} {{else}}
         <div class="col-xs-3">
             <h4>{{name}}</h4>
-            <form id="user{{user_id}}"
-                <select ></form>
-
+            <h5>Available xp: </h5>
+            <form id="user{{user_id}}">
+                <select multiple name="class-cards{{user_id}}">
+                    {{#../classCards}} {{#if empire}} {{else}}
+                    {{#if_eq deck ../name}}
+                    <option value="{{id}}" data-cost"{{cost}}">{{name}} {{cost}}xp</option>
+                    {{/if_eq}}
+                    {{/if}} {{/../classCards}}
+                </select>
+                <select multiple name="item-cards{{user_id}}">
+                    {{#../itemCards}}
+                    <option value="{{id}}" data-cost="{{cost}}">{{name}} tier: {{tier}} credits: {{cost}} </option>
+                    {{/../itemCards}}
+                </select>
+                <select multiple name="reward-cards{{user_id}}">
+                    {{#../rewardCards}}
+                    {{#if empire}} {{else}}
+                    {{#if deck}}
+                    {{#if_eq deck ../name}}
+                    <option value="{{id}}">{{name}}</option>
+                    {{/if_eq}}
+                    {{else}}
+                    <option value="{{id}}">{{name}}</option>
+                    {{/if}}
+                    {{/if}}
+                    {{/../rewardCards}}
+                </select>
+                <input type="submit" class="char-update-submit" value="Update {{name}}">
+            </form>
         </div>
-    </div> --}}
+        {{/if}}
+        {{/groupInfo}}
+    </div>
 </div>
+<br>
+<br>
+<br>
+<br>
