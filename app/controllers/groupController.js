@@ -21,7 +21,7 @@ router.get('/create/members/:group', function (req, res) {
     res.render('../app/views/groups/add-members', {
         group: group,
         logged_in: req.session.logged_in,
-        user_name: req.session.userName
+        user_name: req.session.username
     });
 });
 
