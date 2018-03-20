@@ -24,9 +24,9 @@
 <br/>
 <div class='row'>
 <!--Home Page Button-->
-<button class='btn btn-primary' id='homeButton'>Home</button>
+<a href='/group'><button class='btn btn-primary' id='homeButton'>Home</button></a>
 <!--Add Members Page-->
-<button class='btn btn-primary' id='addMembers'>Add Members</button>
+<a href='/group/create/members/{{group}}'><button class='btn btn-primary' id='addMembers'>Add Members</button></a>
 </div>
 <br/>
 <br/>
@@ -66,10 +66,6 @@ $('#exitButton').on('click', function() {
 });
 //Add Member Button
 $('#addMember').on('click', function() {
-
-});
-//Home Button
-$('#homeButton').on('click', function() {
 
 });
 //Modal Delete Group Button
