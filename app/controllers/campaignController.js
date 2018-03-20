@@ -8,12 +8,14 @@ router.get("/:group", function (req, res) {
 
     connection.query(query, [req.params.group], function (err, members) {
         var charQuery = "SELECT * FROM characters";
-
+        console.log(members);
         connection.query(charQuery, function (err, characters) {
 
 
             res.render("../app/views/campaign/main-campaign", {
                 group: req.params.group,
+                logged_in: req.session.logged_in,
+                user_name: req.session.username,
                 members: members,
                 characters: characters
             });
@@ -50,12 +52,11 @@ router.post("/:group/characters", function (req, res) {
         charAdd();
     });
 
-})
+});
 
-
-
-
-
-
+var query = 'REMOVE FROM groups WHERE group_id=?'
+connection.query(query, [req.body.groups], function (err, response) {
+    throw err;
+});
 
 module.exports = router;

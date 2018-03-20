@@ -73,6 +73,11 @@ footer {
     font-size: 32px;
 }
 
+#deleteGroupModal {
+    color: red;
+    font-weight: bold;
+}
+
 #newUserWarning {
     color: rgba(214,40,40,1);
     text-decoration: underline overline;
