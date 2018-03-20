@@ -7,7 +7,7 @@
 
 
 <!-- Modal for getting the current location  -->
-<div id="modLocation" class="modal">
+<div id="modLocation" class="modal" style="padding:5px !important; width:500px !important; " >
 	<div class="modal-content loading">
 		<span id="closeModLocation" class="close">&times;</span>
 		<h2>Searching for GPS location</h2>
@@ -95,7 +95,7 @@
 		</strong>
 	</tr>
 	{{#each schedLines}}
-	<tr>
+	<tr class="row-click" data-row="{{this.schedId}}">
 		<td>
 			<h5>{{this.location}}</h5>
 		</td>
@@ -198,8 +198,11 @@
 		<div class='col-sm-6'>
 			<input type='text' class="form-control" id="locatAddress" />
 		</div>
-		<div class='col-sm-4'>
-			<button class='btn btn-primary bttn-store' type='button'>Save</button>
+		<div class='col-sm-2'>
+			<button class='btn btn-primary bttn-store' type='button'>Add</button>
+		</div>
+		<div class='col-sm-2'>
+			<button class='btn btn-primary bttn-done' type='button'>Done</button>
 		</div>
 	</div>
 </div>
@@ -281,12 +284,42 @@
 			},
 			function (data, status) {
 				if (data.errCode === 0) {
-					//there is no error
-					window.location.href = "/group"
+					//there is no error  so reload the page
+					window.location.reload(true);
+					//go to group if pick done
+					//window.location.href = "/group"
 				} else {
 					//there is an error ... do something
 				};
 			});
+	};
+
+
+	var doneAppoint = function () {
+		//store the appointment
+		$.post("/schedule/done",
+			{
+				group_id : {{this.group_id}},  //send group ID back during post
+				start_date : $("#inpStartDate").val(),
+				start_time : $("#inpStartTime").val(),
+				stop_time : $("#inpStopTime").val(),
+				nextLoc : currLoc
+			},
+			function (data, status) {
+				if (data.errCode === 0) {
+					//there is no error  so reload the page
+					//window.location.reload(true);
+					//go to group if pick done
+					//window.location.href = "/group"
+				} else {
+					//there is an error ... do something
+				};
+			});
+	};
+
+	var evalRowClick = function(data) {
+		//console.log( this );
+		console.log( $(this).attr("data-row") );
 	};
 
 
@@ -299,7 +332,8 @@
 	});
 
 	$(document.body).on("click", ".bttn-store", saveAppoint);
-
+	$(document.body).on("click", ".bttn-done", doneAppoint);
+	$(document.body).on("click", ".row-click", evalRowClick);
 
 
 </script>
