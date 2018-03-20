@@ -58,21 +58,37 @@ CREATE TABLE character_cards (
 );
 
 CREATE TABLE session (
-    id INT NOT NULL AUTO_INCREMENT,
+    id INT,
+    group_id INT,
     credits INT,
     picture VARCHAR(255),
-    game_date_unix INT(13),
-    primary key (id)
+    game_date_start_unix INT(13),
+    game_date_stop_unix INT(13),
+    FOREIGN KEY (group_id) REFERENCES groups(id)
+);
+
+CREATE TABLE scheduled (
+    id INT,
+    group_id INT,
+    locat VARCHAR(255),
+    game_date_start_unix INT(13),
+    FOREIGN KEY (group_id) REFERENCES groups(id)
 );
 
 CREATE TABLE user_groups (
     group_id INT,
     user_id INT,
     character_id INT,
-    session_id INT,
     empire BOOLEAN DEFAULT false,
     foreign key (group_id) references groups(id),
     foreign key (user_id) references users(id),
-    foreign key (character_id) references characters(id),
-    foreign key (session_id) references session(id)
+    foreign key (character_id) references characters(id)
 );
+
+
+CREATE TABLE administrators (
+    id INT,
+    adminName VARCHAR(20),
+    email VARCHAR(30),
+);
+
