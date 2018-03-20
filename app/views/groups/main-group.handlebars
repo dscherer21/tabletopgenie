@@ -1,16 +1,39 @@
 {{#if logged_in}}
-
+<h2>{{user_name}}'s Groups:</h2>
 {{#each groups}}
 <br>
-<a class="btn btn-primary" href="/campaign/{{this.name}}" role="button" data-group="{{this.group_id}}">{{this.name}}</a>
-{{/each}}
-
-<form action="/group/create" method="post" id="form">
-		<input type="text" name="group" placeholder="group name">
-		<br>
-		<input type="submit" id="submitButton" value="Create New Group">
-	</form>
-
-    {{else}}
-    <p>Please login to create a new group</p>
+<a href="/campaign/{{this.name}}" role="button" data-group="{{this.group_id}}">
+    <h3>{{this.name}}</h3>
+</a>
+<br> {{/each}}
+<br>
+<form id="form">
+    <input type="text" name="group" id="group" placeholder="group name">
+    <br>
+    <input type="submit" class="submitButton" value="Create New Group">
+</form>
+<br>
+<p class="error-p"></p>
+<br>
+<br>
+<br> {{else}}
+<p>Please login to create a new group</p>
 {{/if}}
+
+<script>
+    $(document.body).on("click", ".submitButton", function (event) {
+        event.preventDefault();
+
+        $.post("/group/create", {
+            group_name: $("#group").val()
+        }, function (data, success) {
+
+            if (data.group_exists == true) {
+                $(".error-p").text("That group already exists.");
+            } else {
+                $(".error-p").text("");
+                window.location.href = "/group/create/members/" + data.group;
+            }
+        });
+    });
+</script>

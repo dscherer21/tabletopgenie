@@ -68,11 +68,13 @@ CREATE TABLE session (
 );
 
 CREATE TABLE scheduled (
-    id INT,
+    id INT AUTO_INCREMENT,
     group_id INT,
     locat VARCHAR(255),
     game_date_start_unix INT(13),
-    FOREIGN KEY (group_id) REFERENCES groups(id)
+    game_date_stop_unix INT(13),
+    FOREIGN KEY (group_id) REFERENCES groups(id),
+    PRIMARY KEY (id)
 );
 
 CREATE TABLE user_groups (
@@ -87,8 +89,9 @@ CREATE TABLE user_groups (
 
 
 CREATE TABLE administrators (
-    id INT,
+    id INT AUTO_INCREMENT,
     adminName VARCHAR(20),
     email VARCHAR(30),
+    PRIMARY KEY (id)
 );
 

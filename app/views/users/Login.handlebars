@@ -1,6 +1,4 @@
 <!-- Trigger the modal with the ? button -->
-
-
 <div id="modal-help" class="modal" style="padding:5px !important; width:500px !important; ">
 	<!-- Modal content-->
 	<div class="modal-content">
@@ -35,7 +33,7 @@
 		<input type="text" name="user_email" id="user_email" placeholder="example@email.com">
 		<br/>
 		<label for="user_password">User Password:</label>
-		<input type="text" name="user_password" id="user_password" placeholder="Password">
+		<input type="password" name="user_password" id="user_password" placeholder="Password">
 		<hr>
 		<!-- <input type="submit" class='btn btn-primary' id="submitButton" value="Login"> -->
 		<button class='btn btn-primary bttn-login' type='button'>Login</button>
@@ -61,16 +59,26 @@
 		<input type="text" name="user_email" id="register_user_email" placeholder="Email">
 		<br/>
 		<label for="register_user_password">Password:</label>
-		<input type="text" name="user_password" id="register_user_password" placeholder="Password">
+		<input type="password" name="user_password" id="register_user_password" placeholder="Password">
 		<br/>
 		<label for="user_password_2">Confirm Password:</label>
-		<input type="text" name="user_password_2" id="user_password_2" placeholder="Confirm Password">
+		<input type="password" name="user_password_2" id="user_password_2" placeholder="Confirm Password">
 		<hr>
 		<!-- <input type="submit" id="submitButton" class='btn btn-primary' value="Create New User">  -->
 		<button class='btn btn-primary bttn-create-new' type='button'>Create New User</button>
 		<button class='btn btn-primary bttn-existing' type='button'>Already Registered</button>
 	</form>
 </div>
+
+<!--{{#if logged_in}}
+	<p>Logged in as {{req.session.username}}.</p>
+	<br/>
+	<a href='/users/log-out'><p>Log out</p></a>
+{{else}}
+	<a href='/users/log-in'><h3>Log In</h3></a>
+{{/if}}-->
+
+
 <hr>
 <hr>
 

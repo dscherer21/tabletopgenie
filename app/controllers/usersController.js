@@ -20,7 +20,7 @@ router.get('/log-in', function (req, res) {
   console.log("hit the login route");
   res.render('../app/views/users/login');
 });
-
+//Terminate Session
 router.get('/log-out', function (req, res) {
   req.session.destroy(function (err) {
     res.redirect('/');
