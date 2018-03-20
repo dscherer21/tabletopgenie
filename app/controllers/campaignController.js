@@ -11,7 +11,6 @@ router.get("/:group", function (req, res) {
         console.log(members);
         connection.query(charQuery, function (err, characters) {
 
-
             res.render("../app/views/campaign/main-campaign", {
                 group: req.params.group,
                 logged_in: req.session.logged_in,
@@ -28,63 +27,57 @@ router.get("/:group/main", function (req, res) {
     connection.query(groupQ, [req.params.group], function (err, id) {
         var groupID = parseInt(id[0].id);
 
-        var ugQuery = "SELECT * FROM user_groups WHERE group_id = ?";
+        var ugQuery = "SELECT ug.*, c.name FROM user_groups ug LEFT JOIN characters c ON c.id = ug.character_id WHERE group_id = ?";
         connection.query(ugQuery, [groupID], function (err, groupInfo) {
 
             var cQuery = "SELECT * FROM characters";
             connection.query(cQuery, function (err, chars) {
                 var cardQuery = "SELECT * FROM cards";
                 connection.query(cardQuery, function (err, cards) {
-var missionCards = [];
-var deploymentCards = [];
-var commandCards = [];
-var rewardCards = [];
-var itemCards = [];
-var supplyCards = [];
-var classCards = [];
+                    var missionCards = [];
+                    var deploymentCards = [];
+                    var commandCards = [];
+                    var rewardCards = [];
+                    var itemCards = [];
+                    var supplyCards = [];
+                    var classCards = [];
 
-for (var i = 0; i < cards.length; i++){
-    switch (cards[i].type){
-        case "Story Mission":
-        missionCards.push(cards[i]);
-        break;
+                    for (var i = 0; i < cards.length; i++) {
+                        switch (cards[i].type) {
+                            case "Story Mission":
+                                missionCards.push(cards[i]);
+                                break;
 
-        case "Side Mission":
-        missionCards.push(cards[i]);
-        break;
-        
-        case "Deployment":
-        deploymentCards.push(cards[i]);
-        break;
+                            case "Side Mission":
+                                missionCards.push(cards[i]);
+                                break;
 
-        case "Command":
-        commandCards.push(cards[i]);
-        break;
+                            case "Deployment":
+                                deploymentCards.push(cards[i]);
+                                break;
 
-        case "Reward":
-        rewardCards.push(cards[i]);
-        break;
+                            case "Command":
+                                commandCards.push(cards[i]);
+                                break;
 
-        case "item":
-        itemCards.push(cards[i]);
-        break;
+                            case "Reward":
+                                rewardCards.push(cards[i]);
+                                break;
 
-        case "supply":
-        supplyCards.push(cards[i]);
-        break;
+                            case "item":
+                                itemCards.push(cards[i]);
+                                break;
 
-        case "class":
-        classCards.push(cards[i]);
-        break;
-    }
-};
-console.log(missionCards);
-// console.log(deploymentCards);
-// console.log(commandCards);
-// console.log(rewardCards);
-// console.log(itemCards);
-// console.log(supplyCards);
-// console.log(classCards);
+                            case "supply":
+                                supplyCards.push(cards[i]);
+                                break;
+
+                            case "class":
+                                classCards.push(cards[i]);
+                                break;
+                        }
+                    };
+
                     res.render("../app/views/campaign/show-campaign", {
                         group: req.params.group,
                         groupInfo: groupInfo,
@@ -137,8 +130,6 @@ router.post("/:group/characters", function (req, res) {
     });
 });
 
-
-});
 //Function to remove Groups from Database
 /*var query = 'REMOVE FROM groups WHERE group_id=?'
 connection.query(query, [req.body.groups], function (err, response) {

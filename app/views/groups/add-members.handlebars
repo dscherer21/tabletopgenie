@@ -25,6 +25,7 @@
             else if (data.exists == false){
                 $(".error-u").text("That user does not exist");
             } else {
+                $(".error-u").text("");
                 $(".group-members").append("<p>" + data.email + "<p>");
             }
         });

@@ -81,10 +81,10 @@ router.post('/create/users', function (req, res) {
             connection.query(groupQuery, [group], function (err, res2) {
 
                 var groupID = res2[0].id;
-                var queryExists = "SELECT * from user_groups WHERE user_id = (?)";
+                var queryExists = "SELECT user_id from user_groups WHERE group_id = (?) AND user_id = (?)";
 
-                connection.query(queryExists, [userID], function (err, res3) {
-                    if (res3.length <= 0) {
+                connection.query(queryExists, [groupID, userID], function (err, res3) {
+                    if (res3.length > 0) {
                         console.log("exists route");
                         res.json({
                             group: group,
