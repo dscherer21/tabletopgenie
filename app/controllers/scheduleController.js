@@ -95,6 +95,7 @@ router.get('/:group_id', function (req, res) {
                 user_email: req.session.user_email,
                 logged_in: req.session.logged_in,
                 user_name: req.session.username,
+                group: req.params.group,
                 group_id: groupId,
                 start_date: moment().format("MM/DD/YYYY"),
                 start_time: moment().format("hh:mm a"),
