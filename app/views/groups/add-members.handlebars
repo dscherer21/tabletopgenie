@@ -1,5 +1,5 @@
-<form action="/group/create/users" method="post" id="form">
-<input type="hidden" name="group" value="{{this.group}}">
+<form id="form">
+<input type="hidden" name="group" id="group" value="{{this.group}}">
     <input type="text" name="email" id="user_email" placeholder="user email">
     <br>
     <input type="submit" id="submitButton" value="Add New User">
@@ -12,3 +12,12 @@
 <p>That user does not exist.</p>
 {{/if}}
 <a class="btn" href="/campaign/{{this.group}}" role="button">Finish and go to group</a>
+
+<script>
+     $(document.body).on("click", "#submitButton", function(){
+        $.post("/group/create/users", {
+            group_name: $("#group").val(),
+            email: $("#user_email").val()
+        });
+    });
+</script>
