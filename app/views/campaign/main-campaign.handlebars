@@ -1,6 +1,6 @@
 <h2>Welcome to group {{group}}!</h2>
 <br/>
-<h3>Group Members: {{#members}}{{name}},{{/members}}</h3>
+<h3>Group Members: {{#members}}{{name}}, {{/members}}</h3>
 <ul>
     {{#members}}
     <li>
@@ -23,6 +23,8 @@
 </ul>
 <br/>
 <div class='row'>
+  <!--Go to group if members are set-->
+  <a href='/campaign/{{group}}/main'><button class='btn btn-primary' id='campaignButton'>Go to Group</button></a>
   <!--Home Page Button-->
   <a href='/group'><button class='btn btn-primary' id='homeButton'>Home</button></a>
   <!--Add Members Page-->
