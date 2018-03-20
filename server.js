@@ -42,6 +42,13 @@ var exphbs = require("express-handlebars");
 var hbs = exphbs.create({
     // Specify helpers which are only registered on this instance.
     helpers: {
+        if_eq: function(a, b, opts) {
+            if (a == b) {
+                return opts.fn(this);
+            } else {
+                return opts.inverse(this);
+            }
+        },
         foo: function (a) { return 'FOO!' + a; },
         bar: function (b) { return 'BAR!' + b; },
         breaklines: function(text) {
