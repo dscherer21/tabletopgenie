@@ -1,7 +1,24 @@
 <!--  schedule page   -->
 
-<!-- Trigger the help modal with the ? button -->
+<!--  scripts for Google Maps -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAE03QBe5yDXRr1fzDvkWs9i_E_BIyCDhk&libraries=places" async
+ defer></script>
+<script src="https://apis.google.com/js/api.js" type="text/javascript"></script>
 
+
+<!-- Modal for getting the current location  -->
+<div id="modLocation" class="modal">
+	<div class="modal-content loading">
+		<span id="closeModLocation" class="close">&times;</span>
+		<h2>Searching for GPS location</h2>
+		<hr>
+		<hr>
+		<p>Please allow location privilege and then wait</p>
+	</div>
+</div>
+
+
+<!-- Trigger the help modal with the ? button -->
 
 <div id="modal-help" class="modal" style="padding:5px !important; width:500px !important; ">
 	<!-- Modal content-->
@@ -19,17 +36,270 @@
 	</div>
 </div>
 
-<h2> Calendar Scheduler </h2> 
-
+<h2> Calendar Scheduler </h2>
 
 <hr>
 <hr>
 
-<!--
-	<script type="text/javascript" src="../../javascript/login.js"></script>
--->
+<h4>Previous games</h4>
+<table style="width:100%" class="table table-bordered table-condensed table-hover">
+	<tr>
+		<strong>
+			<th>Group name</th>
+			<th>Date</th>
+			<th>Day</th>
+			<th>Start Time</th>
+			<th>Stop Time</th>
+			<th>Duration</th>
+			<th>Picture</th>
+		</strong>
+	</tr>
+	{{#each outputLines}}
+	<tr>
+		<td>
+			<h5>{{this.group_name}}</h5>
+		</td>
+		<td>
+			<h5>{{this.date_start}}</h5>
+		</td>
+		<td>
+			<h5>{{this.day_start}}</h5>
+		</td>
+		<td>
+			<h5>{{this.time_start}}</h5>
+		</td>
+		<td>
+			<h5>{{this.time_stop}}</h5>
+		</td>
+		<td>
+			<h5>{{this.duration}}</h5>
+		</td>
+		<td>
+			<h5>{{this.picture_avail}}</h5>
+		</td>
+	</tr>
+	{{/each}}
+</table>
+<br/>
+{{#if isSchedOutput}}
+<h4>Scheduled future games</h4>
+<table style="width:100%" class="table table-bordered table-condensed table-hover">
+	<tr>
+		<strong>
+			<th>Location</th>
+			<th>Date</th>
+			<th>Day</th>
+			<th>Start Time</th>
+			<th>Stop Time</th>
+			<th>Duration</th>
+		</strong>
+	</tr>
+	{{#each schedLines}}
+	<tr>
+		<td>
+			<h5>{{this.location}}</h5>
+		</td>
+		<td>
+			<h5>{{this.date_start}}</h5>
+		</td>
+		<td>
+			<h5>{{this.day_start}}</h5>
+		</td>
+		<td>
+			<h5>{{this.time_start}}</h5>
+		</td>
+		<td>
+			<h5>{{this.time_stop}}</h5>
+		</td>
+		<td>
+			<h5>{{this.duration}}</h5>
+		</td>
+	</tr>
+	{{/each}}
+</table>
+{{/if}}
+
+<br/>
+<h4>Next Game</h4>
+
+<div class="container">
+	<div class="row">
+		<div class='col-sm-3'>
+			<h4>Next Date</h4>
+		</div>
+		<div class='col-sm-3'>
+			<h4>Start Time</h4>
+		</div>
+		<div class='col-sm-3'>
+			<h4>Stop Time</h4>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class='col-sm-3'>
+			<div class="form-group">
+				<div class='input-group date' id="startDate">
+					<input type='text' class="form-control" id="inpStartDate" />
+					<span class="input-group-addon">
+						<span class="glyphicon glyphicon-calendar"></span>
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class='col-sm-3'>
+			<div class="form-group">
+				<div class='input-group date' id="startTime">
+					<input type='text' class="form-control" id="inpStartTime" />
+					<span class="input-group-addon">
+						<span class="glyphicon glyphicon-time"></span>
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class='col-sm-3'>
+			<div class="form-group">
+				<div class='input-group date' id='stopTime'>
+					<input type='text' class="form-control" data-provide="datepicker-inline" id="inpStopTime" />
+					<span class="input-group-addon">
+						<span class="glyphicon glyphicon-time"></span>
+					</span>
+				</div>
+			</div>
+		</div>
+
+		<script type="text/javascript">
+			//functions to utilize date picker
+			$(function () {
+				$('#startDate').datetimepicker({
+					format: 'MM/DD/YYYY'
+				});
+			});
+
+			$(function () {
+				$('#startTime').datetimepicker({
+					format: 'LT'
+				});
+			});
+
+			$(function () {
+				$('#stopTime').datetimepicker({
+					format: 'LT'
+				});
+			});
+		</script>
+
+	</div>
+	<div class="row">
+		<div class='col-sm-6'>
+			<h4>location:</h4>
+		</div>
+	</div>
+	<div class="row">
+		<div class='col-sm-6'>
+			<input type='text' class="form-control" id="locatAddress" />
+		</div>
+		<div class='col-sm-4'>
+			<button class='btn btn-primary bttn-store' type='button'>Save</button>
+		</div>
+	</div>
+</div>
+
+
+<br/>
+<br/>
+<br/>
+<br/>
+
+<script type="text/javascript" src="../../javascript/numeral.js"></script>
+
 
 
 <script>
+	var currLoc = {
+		searchLoc: {
+			lat: 0.0,
+			long: 0.0,
+			dist: 0.0
+		},
+		addrSearchStr: ""
+	};
+
+	var keyAPIgoogle = "AIzaSyAE03QBe5yDXRr1fzDvkWs9i_E_BIyCDhk";
+
+	var getLocation = function () {
+		$("#modLocation").css("display", "block");
+		//modalWaitLocation.style.display = "block";
+		navigator.geolocation.getCurrentPosition(showPosition,
+			function (error) {
+				//there is a problem with getting the GPS data
+
+				geoPushDefault();
+				//modalWaitLocation.style.display = "none";
+				$("#modLocation").css("display", "none");
+			});
+	};
+
+	var showPosition = function (position) {
+		currLoc.searchLoc.lat = numeral(position.coords.latitude).format("0000.000000");
+		currLoc.searchLoc.long = numeral(position.coords.longitude).format("0000.000000");
+		currLoc.searchLoc.dist = 0.0;
+		currLoc.addrSearchStr = "";
+		//next step is to convert to a postal address
+		convertGeoToAddr();
+	};
+
+	var convertGeoToAddr = function () {
+		var userPositionToAddressURL = "https://maps.googleapis.com/maps/api/geocode/json?latlng=";
+		userPositionToAddressURL += numeral(currLoc.searchLoc.lat).format("+0000.000000");
+		userPositionToAddressURL += "," + numeral(currLoc.searchLoc.long).format("+0000.000000");
+		userPositionToAddressURL += "&key=" + keyAPIgoogle;
+
+		$.ajax({
+			url: userPositionToAddressURL,
+			method: "GET"
+		}).then(function (response) {
+			currLoc.searchLoc.addrSearchStr = response.results[0].formatted_address;
+			//store the orignal string to see if need to re-compute geo location
+			//currLoc.searchLoc.addrOriginalStr = currLoc.searchLoc.addrSearchStr;
+			$("#locatAddress").val(currLoc.searchLoc.addrSearchStr);
+			//turn off wait location
+			//modalWaitLocation.style.display = "none";
+			$("#modLocation").css("display", "none");
+		});
+	};
+
+
+	var saveAppoint = function () {
+		//store the appointment
+		$.post("/schedule/save",
+			{
+				group_id : {{this.group_id}},  //send group ID back during post
+				start_date : $("#inpStartDate").val(),
+				start_time : $("#inpStartTime").val(),
+				stop_time : $("#inpStopTime").val(),
+				nextLoc : currLoc
+			},
+			function (data, status) {
+				if (data.errCode === 0) {
+					//there is no error
+					window.location.href = "/group"
+				} else {
+					//there is an error ... do something
+				};
+			});
+	};
+
+
+	$(document).ready(function () {
+		//document is ready, so move the incoming data over
+		$("#inpStartDate").val("{{this.start_date}}");
+		$("#inpStartTime").val("{{this.start_time}}");
+		$("#inpStopTime").val("{{this.stop_time}}");
+		getLocation();
+	});
+
+	$(document.body).on("click", ".bttn-store", saveAppoint);
+
+
 
 </script>
