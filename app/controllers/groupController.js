@@ -65,8 +65,10 @@ router.post('/create', function (req, res) {
 });
 
 router.post('/create/users', function (req, res) {
-    var group = req.body.group;
+    var group = req.body.group_name;
     var email = req.body.email;
+    console.log(group);
+    console.log(email);
     var userQuery = "SELECT id FROM users WHERE email = ?";
 
     connection.query(userQuery, [email], function (err, response) {
@@ -82,29 +84,27 @@ router.post('/create/users', function (req, res) {
                 var queryExists = "SELECT * from user_groups WHERE user_id = (?)";
 
                 connection.query(queryExists, [userID], function (err, res3) {
-                    if (res3.length > 0) {
+                    if (res3.length <= 0) {
+                        console.log("exists route");
+                        res.json({
+                            group: group,
+                            user_already_added: true
 
+                        });
+
+                    } else {
+                        console.log(res3);
+                        console.log("insert route");
                         var insertQuery = "INSERT INTO user_groups (group_id, user_id) VALUES (?, ?)";
 
                         connection.query(insertQuery, [groupID, userID], function (err, res4) {
 
-                            connection.query(query, [userID, groupID, userID], function (err, res5) {
+                            res.json({
+                                group: group,
+                                email: email,
+                                exists: true
 
-                                var emailDisplayQuery = "SELECT u.email, ug.group_id FROM users u LEFT JOIN user_groups ug ON u.id = ug.user_id WHERE ug.group_id = ?"
-
-                                connection.query(emailDisplayQuery, [groupID], function (err, users) {
-                                    res.json({
-                                        group: group,
-                                        user_emails: users,
-                                        exists: true
-                                    });
-                                });
                             });
-                        });
-                    } else {
-                        res.json({
-                            group: group,
-                            user_already_added: true
                         });
                     }
                 });

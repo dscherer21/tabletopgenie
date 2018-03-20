@@ -5,24 +5,23 @@
     <li>
         <h3>{{name}}</h3>
         {{#if char_name}}
-            <p>{{char_name}}</p>
+        <p>{{char_name}}</p>
         {{else}}
-            <form action="/campaign/{{../group}}/characters/" method="post">
-                <input type="hidden" name="memid" value="{{id}}">
-                <select name="charid" class="form-control">
+        <form id="campaign-form" action="/campaign/{{../group}}/characters/" method="post">
+            <input type="hidden" name="memid" class="memid" value="{{id}}">
+            <select name="charid{{id}}" class="charid form control">
                 {{#../characters}}
                 <option value="{{id}}">{{name}}</option>
                 {{/../characters}}
-                </select>
-        {{/if}}
-    {{/members}}
-                <input type="submit" value="Choose Characters">
-            </form>
+            </select>
+            {{/if}} {{/members}}
+            <input type="submit" class="character-submit" value="Choose Characters">
+        </form>
     </li>
 </ul>
 <br/>
 <!--Home Page Button-->
-<button class='btn btn-primary' >Home</button>
+<button class='btn btn-primary'>Home</button>
 <br/>
 <br/>
 <!--Delete Group Button-->
@@ -30,22 +29,53 @@
 
 
 <div class="modal" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Warning!!</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p>Are you sure?</p>
-        <p>Clicking "Delete" will delete your group?</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger">Delete</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Exit</button>
-      </div>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Warning!!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure?</p>
+                <p>Clicking "Delete" will delete your group?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger">Delete</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Exit</button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
+
+<script>
+
+    $(document.body).on("submit", "#campaign-form", function (event) {
+        event.preventDefault();
+        var url = ($(this).attr("action"));
+        var formVals = ($(this).serializeArray());
+        var charIDs = [];
+        var memIDs = [];
+
+        for (var i = 0; i < formVals.length; i++) {
+            if (i % 2 === 0) {
+                memIDs.push(formVals[i].value);
+            } else {
+                charIDs.push(formVals[i].value);
+            }
+        }
+
+        console.log(charIDs);
+        console.log(memIDs);
+
+        $.post(url, {
+            memids: memIDs,
+            charids: charIDs,
+            group_name: $("#group").val()
+        }, function (data, success) {
+            console.log(data);
+            window.location.href = data.url;
+        });
+    });
+</script>
