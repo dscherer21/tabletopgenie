@@ -53,10 +53,10 @@ router.post("/:group/characters", function (req, res) {
     });
 
 });
-
-var query = 'REMOVE FROM groups WHERE group_id=?'
+//Function to remove Groups from Database
+/*var query = 'REMOVE FROM groups WHERE group_id=?'
 connection.query(query, [req.body.groups], function (err, response) {
     throw err;
-});
+});*/
 
 module.exports = router;
