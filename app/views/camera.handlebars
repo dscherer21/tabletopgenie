@@ -1,13 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-	<meta charset="UTF-8">
-	<link rel="stylesheet" href="../../css/style.css" type="text/css" />
-	<title>Table Top Genie</title>
-</head>
-
-<body>
 
 	<p>CAMERA</p>
 
@@ -17,7 +7,7 @@
 	<canvas id="canvas" width="320" height="240"></canvas>
 	<br/>
 	<br/>
-	<img id="snap">
+	<img class"img-item" id="snap">
 
 	<form action="/picture/create" enctype="multipart/form-data" method="post" id="form">
 		<input type="text" name="title">
@@ -69,11 +59,17 @@
 				};
 				hidden_canvas.style.display = "block";
 
+				//right now, the image is on hidden_canvas
+				var elephant = document.getElementById("snap");
+				console.log ("elephant =\n" + elephant);
+
+
 				var filename = document.querySelector('#filename');
 				console.log(filename.files);
 				//$(filename).attr("value", snap);
 				console.log(filename.files[0]);
-				var data = new FormData(jQuery('form'[0]));
+				//var data = new FormData(jQuery('form'[0]));
+				data = localStorage.getItem('elephant');
 				console.log("data=");
 				console.log(data);
 				$.ajax({
@@ -120,6 +116,7 @@
 			};
 
 			$(document.body).on("click", ".sendButton", sendClick);
+			//$(document.body).on("load", ".img-item", sendClick);
 
 
 			$(document).ready(function () {
@@ -167,6 +164,13 @@
 
 					var snap = takeSnapshot();
 
+					try { 
+						localStorage.setItem('elephant', snap);
+						}
+						catch(e) {
+							console.log("storage failed : " + e);
+						};
+
 					// Show image. 
 					image.setAttribute('src', snap);
 					image.classList.add("visible");
@@ -199,10 +203,3 @@
 			});
 
 		</script>
-
-		<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
-		 crossorigin="anonymous"></script> {{!--
-		<script src="/assets/js/ajax.js"></script> --}}
-</body>
-
-</html>
