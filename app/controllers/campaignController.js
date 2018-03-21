@@ -110,11 +110,14 @@ router.get("/:group/main", function (req, res) {
 
 router.get("/:group/addsession", function (req, res) {
     var groupName = req.params.group;
-console.log(groupName);
-    var groupNameQ = "SELECT id FROM groups WHERE name = ?"
+
+    console.log(groupName);
+
+    var groupNameQ = "SELECT id FROM groups WHERE name = (?)"
     connection.query(groupNameQ, [groupName], function (err, groupI) {
 
-        var groupID = groupI[0].name;
+        var groupID = groupI[0].id;
+        console.log(groupID);
 
         var newSession = "INSERT INTO session (group_id) VALUES (?)"
         connection.query(newSession, [groupID], function (err, sessionInsert) {
@@ -133,11 +136,8 @@ console.log(groupName);
                         var sessionsQ = "SELECT * FROM session WHERE group_id = ?";
                         connection.query(sessionsQ, [groupID], function (err, sessions) {
 
-                            res.render("../app/views/campaign/show-sessions", {
-                                group_id: groupID,
-                                group_name: groupName,
-                                sessions: sessions
-                            });
+                            var queryString =
+                                res.redirect("/picture/" + groupID + "/" + groupName);
                         });
                     });
                 });
