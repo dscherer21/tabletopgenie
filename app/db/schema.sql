@@ -95,3 +95,16 @@ CREATE TABLE administrators (
     PRIMARY KEY (id)
 );
 
+
+CREATE TABLE audit_log (
+    id INT AUTO_INCREMENT,
+    typeRec VARCHAR (15),
+    time_stamp INT(13),
+    user_name VARCHAR(20),
+    user_email VARCHAR(20),
+    fault VARCHAR(30),
+    browser_id VARCHAR(10),
+    ip_addr VARCHAR(10),
+    PRIMARY KEY (id)  
+)
+

@@ -73,6 +73,7 @@ var pictureController = require("./app/controllers/pictureController.js");
 var usersController = require("./app/controllers/usersController.js");
 var campaignController = require("./app/controllers/campaignController.js");
 var scheduleController = require("./app/controllers/scheduleController.js");
+var adminController = require("./app/controllers/adminController.js");
 
 console.log('all controllers loaded');
 
@@ -83,6 +84,7 @@ app.use("/group", groupController);
 app.use("/users", usersController);
 app.use("/campaign", campaignController);
 app.use("/schedule", scheduleController);
+app.use("/admin", adminController);
 
 
 // Start listening on PORT

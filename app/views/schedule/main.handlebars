@@ -47,8 +47,7 @@
 				</button>
 			</div>
 			<div class="modal-body">
-				<P id="del-event">Event</P>
-				<p>Are you sure?</p>
+				<P id="del-event"></P>
 				<p>Clicking "Delete" will delete this entry</p>
 			</div>
 			<div class="modal-footer">
@@ -223,13 +222,8 @@
 		</div>
 		<div class='col-sm-4'>
 			<button class='btn btn-primary bttn-store' type='button'>Save</button>
-<<<<<<< HEAD
-			<button>{{group}} Home</button>
-			<button>{{name}} Home</button>
-=======
 			<a href='/campaign/{{group}}'><button class='btn btn-primary'>{{group}} Home</button></a>
 			<a href='/group'><button class='btn btn-primary'>{{user_name}} Home</button></a>
->>>>>>> d00f128b278fcdf128998d600192bb757f4162b8
 		</div>
 	</div>
 </div>
@@ -362,6 +356,7 @@
 		var modDel = $("#modal-delete");
 		$(modDel).css("display", "none");		
 		$(rowClickedTag).css("background-color", rowOrigColor);
+		window.location.reload(false); 
 	};
 
 
@@ -370,7 +365,7 @@
 		$("#inpStartDate").val("{{this.start_date}}");
 		$("#inpStartTime").val("{{this.start_time}}");
 		$("#inpStopTime").val("{{this.stop_time}}");
-		getLocation();
+//		//getLocation();
 	});
 
 	$(document.body).on("click", ".bttn-store", saveAppoint);

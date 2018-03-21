@@ -3,6 +3,9 @@ var express = require('express');
 var router = express.Router();
 var mysql = require('mysql');
 var connection = require('../config/connection.js');
+var moment = require("moment");
+var numeral = require("numeral");
+var nodemailer = require('nodemailer');
 
 
 //hack attack should look for 
@@ -10,6 +13,41 @@ var connection = require('../config/connection.js');
 
 
 console.log('users controller is loaded..');
+
+var writeAuditLog = function (_typeRec, _user_name, _user_email, _fault, _browser_id, _ip_addr) {
+  //write to the audit file
+  //first make sure none are blank
+  if (_typeRec === undefined || _typeRec === null) {
+    _typeRec = " ";
+  };
+  if (_user_name === undefined || _user_name === null) {
+    _user_name = " ";
+  };
+  if (_user_email === undefined || _user_email === null) {
+    _user_email = " ";
+  };
+  if (_fault === undefined || _fault === null) {
+    _fault = " ";
+  };
+  if (_browser_id === undefined || _browser_id === null) {
+    _browser_id = " ";
+  };
+  if (_ip_addr === undefined || _ip_addr === null) {
+    _ip_addr = " ";
+  };
+
+  var timeStamp = moment().unix();
+
+  var query = "INSERT INTO audit_log ( typeRec, time_stamp, user_name, user_email, fault, browser_id, ip_addr ) VALUES (?, ?, ?, ?, ?, ?, ? )";
+
+
+  connection.query(query, [_typeRec, timeStamp, _user_name, _user_email, _fault, _browser_id, _ip_addr], function (err, response) {
+    console.log("error at audit = \n" + err);
+    //write to audit file
+    //if (err) throw err;
+  });
+};
+
 
 //this is the users_controller.js file
 router.get('/new', function (req, res) {
@@ -28,7 +66,6 @@ router.get('/log-out', function (req, res) {
 });
 
 
-
 //if user trys to sign in with the wrong password or email tell them that on the page
 router.post('/login', function (req, res) {
   var respondObj = {
@@ -38,7 +75,8 @@ router.post('/login', function (req, res) {
     errExp: ""   //error explanation
   };
 
-  var sendObjBack = function (errCode, errMsg, errLine, errExp) {
+  var sendObjBack = function (errCode, errMsg, errLine, errExp, _user_name, _user_email) {
+    writeAuditLog ( "login attempt", _user_name, _user_email, "code: " + errCode + " = " + errMsg, " ", " " );
     respondObj.errCode = errCode;
     respondObj.errLine = errLine;
     respondObj.errMsg = errMsg;
@@ -55,7 +93,9 @@ router.post('/login', function (req, res) {
     sendObjBack(12,
       "USER EMAIL IS BLANK",
       2,
-      "The user email is blank and needs to be in the proper format."
+      "The user email is blank and needs to be in the proper format.",
+      " ",
+      user_email
     );
     return;
   };
@@ -65,7 +105,9 @@ router.post('/login', function (req, res) {
     sendObjBack(13,
       "USER EMAIL IS BLANK",
       2,
-      "The user email is blank and needs to be in the proper format."
+      "The user email is blank and needs to be in the proper format.",
+      " ",
+      user_email
     );
     return;
   };
@@ -76,7 +118,9 @@ router.post('/login', function (req, res) {
     sendObjBack(5,
       "USER EMAIL IS INVALID",
       2,
-      "The user email does not have an '@' in it."
+      "The user email does not have an '@' in it.",
+      " ",
+      user_email
     );
     return;
   };
@@ -85,7 +129,9 @@ router.post('/login', function (req, res) {
     sendObjBack(6,
       "USER EMAIL IS INVALID",
       2,
-      "The user email does not have a '.' in it."
+      "The user email does not have a '.' in it.",
+      " ",
+      user_email
     );
     return;
   };
@@ -95,7 +141,9 @@ router.post('/login', function (req, res) {
     sendObjBack(14,
       "USER PASSWORD IS BLANK",
       3,
-      "The user password can not be blank and needs to be greater than 5 characters."
+      "The user password can not be blank and needs to be greater than 5 characters.",
+      " ",
+      user_email
     );
     return;
   };
@@ -105,7 +153,9 @@ router.post('/login', function (req, res) {
     sendObjBack(15,
       "USER PASSWORD IS BLANK",
       3,
-      "The user password can not be blank (spaces don't count !!!) and needs to be greater than 5 characters."
+      "The user password can not be blank (spaces don't count !!!) and needs to be greater than 5 characters.",
+      " ",
+      user_email
     );
     return;
   };
@@ -117,8 +167,10 @@ router.post('/login', function (req, res) {
       sendObjBack(35,
         "NO SUCH USER",
         1,
-        "The email you have entered is not on file."
-      );
+        "The email you have entered is not on file.",
+        " ",
+        user_email
+        );
       return;
     };
     bcrypt.compare(user_password, response[0].password_hash, function (err, result) {
@@ -133,14 +185,18 @@ router.post('/login', function (req, res) {
         sendObjBack(0,
           "",
           0,
-          ""
+          "",
+          req.session.username,
+          user_email
         );
       } else {
         sendObjBack(35,
           "WRONG PASSWORD",
           1,
-          "The password entered does not match the one on record."
-        );
+          "The password entered does not match the one on record.",
+          req.session.username,
+          user_email
+            );
       }
     });
   });
@@ -162,7 +218,8 @@ router.post('/create', function (req, res) {
   };
 
 
-  var sendObjBack = function (errCode, errMsg, errLine, errExp) {
+  var sendObjBack = function (errCode, errMsg, errLine, errExp, _user_name, _user_email) {
+    writeAuditLog ( "login attempt", _user_name, _user_email, "code: " + errCode + " = " + errMsg, " ", " " );
     respondObj.errCode = errCode;
     respondObj.errLine = errLine;
     respondObj.errMsg = errMsg;
@@ -174,7 +231,9 @@ router.post('/create', function (req, res) {
     sendObjBack(10,
       "USER NAME IS BLANK",
       1,
-      "The user name is blank and needs a non blank name of at least 5 characters."
+      "The user name is blank and needs a non blank name of at least 5 characters.",
+      userName,
+      userEmail
     );
     return;
   };
@@ -184,7 +243,9 @@ router.post('/create', function (req, res) {
     sendObjBack(11,
       "USER NAME IS BLANK",
       1,
-      "The user name is blank and needs a non blank name of at least 5 characters."
+      "The user name is blank and needs a non blank name of at least 5 characters.",
+      userName,
+      userEmail
     );
     return;
   };
@@ -193,7 +254,9 @@ router.post('/create', function (req, res) {
     sendObjBack(1,
       "USER NAME IS TOO SHORT",
       1,
-      "The user name needs at least 5 characters."
+      "The user name needs at least 5 characters.",
+      userName,
+      userEmail
     );
     return;
   };
@@ -203,7 +266,9 @@ router.post('/create', function (req, res) {
     sendObjBack(12,
       "USER EMAIL IS BLANK",
       2,
-      "The user email is blank and needs to be in the proper format."
+      "The user email is blank and needs to be in the proper format.",
+      userName,
+      userEmail
     );
     return;
   };
@@ -213,7 +278,9 @@ router.post('/create', function (req, res) {
     sendObjBack(13,
       "USER EMAIL IS BLANK",
       2,
-      "The user email is blank and needs to be in the proper format."
+      "The user email is blank and needs to be in the proper format.",
+      userName,
+      userEmail
     );
     return;
   };
@@ -223,7 +290,9 @@ router.post('/create', function (req, res) {
     sendObjBack(5,
       "USER EMAIL IS INVALID",
       2,
-      "The user email does not have an '@' in it."
+      "The user email does not have an '@' in it.",
+      userName,
+      userEmail
     );
     return;
   };
@@ -232,7 +301,9 @@ router.post('/create', function (req, res) {
     sendObjBack(6,
       "USER EMAIL IS INVALID",
       2,
-      "The user email does not have a '.' in it."
+      "The user email does not have a '.' in it.",
+      userName,
+      userEmail
     );
     return;
   };
@@ -241,7 +312,9 @@ router.post('/create', function (req, res) {
     sendObjBack(14,
       "USER PASSWORD IS BLANK",
       3,
-      "The user password can not be blank and needs to be greater than 5 characters."
+      "The user password can not be blank and needs to be greater than 5 characters.",
+      userName,
+      userEmail
     );
     return;
   };
@@ -251,7 +324,9 @@ router.post('/create', function (req, res) {
     sendObjBack(15,
       "USER PASSWORD IS BLANK",
       3,
-      "The user password can not be blank (spaces don't count !!!) and needs to be greater than 5 characters."
+      "The user password can not be blank (spaces don't count !!!) and needs to be greater than 5 characters.",
+      userName,
+      userEmail
     );
     return;
   };
@@ -260,7 +335,9 @@ router.post('/create', function (req, res) {
     sendObjBack(9,
       "USER PASSWORD IS TOO SHORT",
       3,
-      "The user password needs to be at least 5 characters without leading or trailing spaces."
+      "The user password needs to be at least 5 characters without leading or trailing spaces.",
+      userName,
+      userEmail
     );
     return;
   };
@@ -270,7 +347,9 @@ router.post('/create', function (req, res) {
     sendObjBack(16,
       "CONFIRMING PASSWORD IS BLANK",
       4,
-      "The confirming password can not be blank."
+      "The confirming password can not be blank.",
+      userName,
+      userEmail
     );
     return;
   };
@@ -281,7 +360,9 @@ router.post('/create', function (req, res) {
     sendObjBack(17,
       "CONFIRMING PASSWORD IS BLANK",
       4,
-      "The confirming password can not be blank and spaces don't count !"
+      "The confirming password can not be blank and spaces don't count !",
+      userName,
+      userEmail
     );
     return;
   };
@@ -290,7 +371,9 @@ router.post('/create', function (req, res) {
     sendObjBack(30,
       "PASSWORDS DO NOT MATCH",
       4,
-      "Both passwords must match EXTACTLY including upper and lower case."
+      "Both passwords must match EXTACTLY including upper and lower case.",
+      userName,
+      userEmail
     );
     return;
   };
@@ -305,8 +388,10 @@ router.post('/create', function (req, res) {
         "EMAIL IS ALREADY IN USE",
         1,
         "An account with that email has already been setup. Either sign in " +
-        "with that account or pick another email to use"
-      );
+        "with that account or pick another email to use",
+        userName,
+        req.body.user_email
+        );
     } else {
       bcrypt.genSalt(10, function (err, salt) {
         bcrypt.hash(userPassword, salt, function (err, hash) {
@@ -327,7 +412,9 @@ router.post('/create', function (req, res) {
               sendObjBack(0,
                 "",
                 0,
-                ""
+                "",
+                userName,
+                userEmail
               );
               //query to re-read the current user to get their id
             });

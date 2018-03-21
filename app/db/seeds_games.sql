@@ -17,3 +17,20 @@ INSERT INTO user_groups ( group_id, user_id, character_id, empire ) VALUES (1, 1
 INSERT INTO administrators ( adminName, email ) VALUES ("Rich Budek", "RichBu001@gmail.com");
 
 INSERT INTO administrators ( adminName, email ) VALUES ("David Scherer-ODell", "dscherer21@gmail.com");
+
+INSERT INTO administrators ( adminName, email ) VALUES ("Mike Erlander", "mrerlander@gmail.com");
+
+INSERT INTO administrators ( adminName, email ) VALUES ("Rich Budek #2", "richbu@hotmail.com");
+
+
+INSERT INTO audit_log ( typeRec, time_stamp, user_name, user_email, faul, browser_id, ip_addr ) 
+VALUES (
+    "INIT FILES",
+    0,
+    "Admin",
+    "Admin@root.com",
+    "successful",
+    " ",
+    " "
+)
+
