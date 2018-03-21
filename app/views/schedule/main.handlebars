@@ -78,7 +78,7 @@
 		</strong>
 	</tr>
 	{{#each outputLines}}
-	<tr>
+	<tr class="row-click2" data-row2="{{this.schedId}}" data-group="{{ this.group_id }}" >
 		<td>
 			<h5>{{this.group_name}}</h5>
 		</td>
@@ -311,7 +311,7 @@
 			//there is no error  so reload the page
 			window.location.reload(true);
 			//go to group if pick done
-			window.location.href = "/group"
+			window.location.href = "/group";
 		} else {
 			//there is an error ... do something
 		};
@@ -351,6 +351,15 @@
 		$(modDel).css("display", "block");
 	};
 
+	var evalRowClick2 = function (data) {
+		//console.log( this );
+		console.log($(this).attr("data-row2"));
+		rowClickedTag = $(this);  //save for later
+		var rowClicked = $(rowClickedTag).attr("data-row2");
+		var groupId = $(rowClickedTag).attr("data-group");
+		var urlString = "/campaign/"+groupId+"/"+rowClicked;  
+		window.location.href = urlString;		
+	};
 
 	var closeModals = function() {
 		var modDel = $("#modal-delete");
@@ -371,6 +380,7 @@
 	$(document.body).on("click", ".bttn-store", saveAppoint);
 	$(document.body).on("click", ".bttn-group", doneAppoint);
 	$(document.body).on("click", ".row-click", evalRowClick);
+	$(document.body).on("click", ".row-click2", evalRowClick2);
 	$(document.body).on("click", ".close-modal", closeModals);
 
 

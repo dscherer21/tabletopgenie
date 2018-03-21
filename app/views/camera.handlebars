@@ -16,7 +16,7 @@
 		<br/>
 		<input type="submit" id="submitButton">
 	</form>
-	<button id="sendButton" class="sendButton">Send Data</button>
+	<button id="sendButton" class="sendButton" data-url="/schedule/{{groupName}}"  >Send Data</button>
 	<br/>
 	<br/>
 
@@ -87,6 +87,9 @@
 						console.log(e);
 					}
 				});
+				var addr = $(sendButton).attr("data-url");
+				console.log(addr);
+				window.location.href = addr;
 			};
 			//};
 
