@@ -89,11 +89,16 @@ router.get('/:group_name', function (req, res) {
 
         console.log("group=" + groupId + "user=" + req.session.user_id);
         connection.query(queryStr, [groupId, req.session.user_id], function (err, response) {
+            console.log("\n\n---response=\n\n" + response);
+
+            //console.log(response[0].id);
+        
             //all of the sessions of previous times pulled out
             for (var i = 0; i < response.length; i++) {
                 //loop thru all of the responses
+                console.log(response[i].id);
                 sessionsOutput.push(new sessionOutputObj(
-                    i,                 //normally the spot for schedule id
+                    response[i].id,                 //normally the spot for schedule id
                     groupId,
                     response[i].name,  //this is group name
                     response[i].game_date_start_unix,
