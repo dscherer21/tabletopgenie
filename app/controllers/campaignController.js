@@ -24,21 +24,27 @@ router.get("/:group", function (req, res) {
 
 router.get("/:group/main", function (req, res) {
     console.log(req.session.username);
+
     var userIDQ = "SELECT id FROM users WHERE name = ?";
     connection.query(userIDQ, [req.session.username], function (err, thisUserID) {
+
         console.log(thisUserID[0].id);
-        var empireQ = "SELECT empire from user_groups WHERE user_id = ?"
-        connection.query(empireQ, [thisUserID[0].id], function (err, isEmpire) {
-            console.log(isEmpire[0].empire);
-            var groupQ = "SELECT id FROM groups WHERE name = ?";
-            connection.query(groupQ, [req.params.group], function (err, id) {
-                var groupID = parseInt(id[0].id);
+
+        var groupQ = "SELECT id FROM groups WHERE name = ?";
+        connection.query(groupQ, [req.params.group], function (err, id) {
+
+            var groupID = parseInt(id[0].id);
+            var empireQ = "SELECT empire from user_groups WHERE user_id = ? AND group_id = ?"
+            connection.query(empireQ, [thisUserID[0].id, groupID], function (err, isEmpire) {
+
+                console.log(isEmpire[0].empire);
 
                 var ugQuery = "SELECT ug.*, c.name FROM user_groups ug LEFT JOIN characters c ON c.id = ug.character_id WHERE group_id = ?";
                 connection.query(ugQuery, [groupID], function (err, groupInfo) {
 
                     var cQuery = "SELECT * FROM characters";
                     connection.query(cQuery, function (err, chars) {
+
                         var cardQuery = "SELECT * FROM cards";
                         connection.query(cardQuery, function (err, cards) {
                             var missionCards = [];
@@ -149,11 +155,15 @@ router.get("/:group/:session", function (req, res) {
     console.log(req.session.username);
     var session = req.params.session;
     var groupID = req.params.group;
+
     var userIDQ = "SELECT id FROM users WHERE name = ?";
     connection.query(userIDQ, [req.session.username], function (err, thisUserID) {
+
         console.log(thisUserID[0].id);
+
         var empireQ = "SELECT empire from user_groups WHERE user_id = ?"
         connection.query(empireQ, [thisUserID[0].id], function (err, isEmpire) {
+
             console.log(isEmpire[0].empire);
 
             var ugQuery = "SELECT ug.*, c.name FROM user_groups ug LEFT JOIN characters c ON c.id = ug.character_id WHERE group_id = ?";
@@ -161,6 +171,7 @@ router.get("/:group/:session", function (req, res) {
 
                 var cQuery = "SELECT * FROM characters";
                 connection.query(cQuery, function (err, chars) {
+
                     var charCardQuery = "SELECT * FROM game_cards WHERE session_id = ?";
                     connection.query(charCardQuery, [session], function (err, charCards) {
                         var charMissionCards = [];
@@ -282,17 +293,16 @@ router.get("/:group/:session", function (req, res) {
     });
 });
 
-
 router.post("/:group/characters", function (req, res) {
     var userIDs = req.body.memids;
     var charIDs = req.body.charids;
     console.log(userIDs);
     console.log(charIDs);
     console.log(req.params.group);
+
     var groupQ = "SELECT id FROM groups WHERE name = ?";
     connection.query(groupQ, [req.params.group], function (err, id) {
         var groupID = parseInt(id[0].id);
-
         var index = 0;
 
         var query = "UPDATE user_groups SET character_id = (?) WHERE user_id = (?) AND group_id = (?)";
@@ -391,9 +401,6 @@ router.post("/:groupid/:charid", function (req, res) {
 
     console.log(req.body);
 
-
-
-
     var userIDQuery = "SELECT user_id FROM user_groups WHERE group_id = ? AND character_id = ?";
     connection.query(userIDQuery, [groupID, character], function (err, user) {
 
@@ -418,14 +425,5 @@ router.post("/:groupid/:charid", function (req, res) {
         res.sendStatus(200);
     });
 });
-
-
-
-
-// //Function to remove Groups from Database
-// /*var query = 'REMOVE FROM groups WHERE group_id=?'
-// connection.query(query, [req.body.groups], function (err, response) {
-//     throw err;
-// });*/
 
 module.exports = router;
