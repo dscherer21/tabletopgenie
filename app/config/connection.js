@@ -18,6 +18,18 @@ connection.connect(function (err) {
     }
     console.log("connected as id " + connection.threadId);
 });
+//To run Database on JAWSDB
+if (process.env.JAWSDB_URL) {
+    connection = mysql.createConnection(process.env.JAWSDB_URL);
+} else {
+    connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: 'hacktheplanet',
+        database: 'todoagain_bd'
+    });
+};
+
 
 // Export connection for our ORM to use.
 module.exports = connection;

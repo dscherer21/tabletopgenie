@@ -39,6 +39,15 @@ footer {
     background-image: linear-gradient(180deg, silver, blue, silver);
 }
 
+.panel {
+    box-shadow: 0  3px 4px rgba(0,0,0,.5);
+    background-image: linear-gradient(45deg, silver, white, silver);
+}
+
+.updatebtn {
+    margin: 10px;
+}
+
 .img-thumbnail {
     background-color: rgba(164,0,178,0);
 }
