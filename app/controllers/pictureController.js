@@ -6,7 +6,7 @@ console.log('picture controller is loaded...');
 
 //this is the picture_controller.js file
 //really /picture
-router.get('/', function(req,res) {
+router.get('/:group_id/:group_name', function(req,res) {
   res.render('../app/views/camera');
 });
 
