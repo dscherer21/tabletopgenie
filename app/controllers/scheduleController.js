@@ -84,7 +84,7 @@ router.get('/:group_id', function (req, res) {
         var queryStr2 = "SELECT * FROM (SELECT * FROM user_groups a LEFT JOIN groups b ON a.group_id = b.id WHERE a.group_id = ? AND a.user_id = ?) c LEFT JOIN scheduled d ON c.group_id=d.group_id";
 
         connection.query(queryStr2, [groupId, req.session.user_id], function (err2, response2) {
-            if (response2.length === 0) {
+            if (response2.length === 0 || response2 == undefined || response2[0].id == null) {
                 //there are no future sessions
                 isSchedOutput = false;
             } else {
@@ -220,8 +220,7 @@ router.post('/done', function (req, res) {
     connection.query(queryStr2, [groupId, req.session.user_id], function (err2, response2) {
         console.log("after query");
         //console.log(response2);
-        console.log(err2);
-        if (response2.length === 0) {
+        if (response2.length === 0 || response2 == undefined || response2[0].id == null) {
             //there are no future sessions
             isSchedOutput = false;
         } else {
@@ -230,7 +229,7 @@ router.post('/done', function (req, res) {
             for (var i = 0; i < response2.length; i++) {
                 //loop thru all of the responses
                 scheduledOutput.push(new sessionOutputObj(
-                    id,
+                    response2[i].id,
                     groupId,
                     response2[i].name,
                     response2[i].game_date_start_unix,
@@ -243,6 +242,7 @@ router.post('/done', function (req, res) {
             //all of the output lines have been formatted in the scheduledOutput array
             //put into array for debugging later on can do this logic on the fly
             for (var i = 0; i < scheduledOutput.length; i++) {
+                console.log("send email = " + i);
                 var subjectStr = scheduledOutput[i].date_start + " game night @ " + scheduledOutput[i].time_start + " from TableTopGenie";
                 var messageStr = "<h3>You have an upcoming game night on:</h3><br/>";
                 messageStr += "<br/>" + scheduledOutput[i].day_start + " " + scheduledOutput[i].date_start
@@ -251,18 +251,26 @@ router.post('/done', function (req, res) {
                 messageStr += "<br/>Location: " + scheduledOutput[i].location;
                 messageStr += "<br/><br/>for game group : " + scheduledOutput[i].group_name;
 
-                var mailTo = "RichBu001@gmail.com";
-                //var mailTo = "RichBu001@gmail.com, mrerlander@gmail.com, dscherer21@gmail.com";
+                //var mailTo = "RichBu001@gmail.com";
+                var mailTo = "RichBu001@gmail.com, mrerlander@gmail.com, dscherer21@gmail.com";
                 var mailOptionsObj = new mailOptions(mailTo, subjectStr, messageStr);
                 transporter.sendMail(mailOptionsObj, function (err, info) {
                     if (err)
                         console.log(err)
-                    else
-                        console.log(info);
+                    else {
+                        //console.log(info);
+                    };
                 });
 
             };
         };
+
+        //send object back to browser can go to the next page
+        sendObjBack(0,
+            "",
+            0,
+            ""
+        );
 
     });
 

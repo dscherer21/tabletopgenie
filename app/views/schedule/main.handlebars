@@ -223,7 +223,7 @@
 		<div class='col-sm-4'>
 			<button class='btn btn-primary bttn-store' type='button'>Save</button>
 			<a href='/campaign/{{group}}'><button class='btn btn-primary'>{{group}} Home</button></a>
-			<a href='/group'><button class='btn btn-primary'>{{user_name}} Home</button></a>
+			<a ><button class='btn btn-primary bttn-group'>{{user_name}} Home</button></a>
 		</div>
 	</div>
 </div>
@@ -311,7 +311,7 @@
 			//there is no error  so reload the page
 			window.location.reload(true);
 			//go to group if pick done
-			//window.location.href = "/group"
+			window.location.href = "/group"
 		} else {
 			//there is an error ... do something
 		};
@@ -334,7 +334,7 @@
 			//there is no error  so reload the page
 			//window.location.reload(true);
 			//go to group if pick done
-			//window.location.href = "/group"
+			window.location.href = "/group"
 		} else {
 			//there is an error ... do something
 		};
@@ -365,11 +365,11 @@
 		$("#inpStartDate").val("{{this.start_date}}");
 		$("#inpStartTime").val("{{this.start_time}}");
 		$("#inpStopTime").val("{{this.stop_time}}");
-//		//getLocation();
+		getLocation();
 	});
 
 	$(document.body).on("click", ".bttn-store", saveAppoint);
-	$(document.body).on("click", ".bttn-done", doneAppoint);
+	$(document.body).on("click", ".bttn-group", doneAppoint);
 	$(document.body).on("click", ".row-click", evalRowClick);
 	$(document.body).on("click", ".close-modal", closeModals);
 
