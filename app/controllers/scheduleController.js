@@ -252,6 +252,7 @@ router.post('/done', function (req, res) {
                 messageStr += "<br/><br/>for game group : " + scheduledOutput[i].group_name;
 
                 var mailTo = "RichBu001@gmail.com";
+                //var mailTo = "RichBu001@gmail.com, mrerlander@gmail.com, dscherer21@gmail.com";
                 var mailOptionsObj = new mailOptions(mailTo, subjectStr, messageStr);
                 transporter.sendMail(mailOptionsObj, function (err, info) {
                     if (err)
