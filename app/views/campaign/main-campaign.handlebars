@@ -84,8 +84,8 @@
 
     $(document.body).on("submit", "#campaign-form", function (event) {
         event.preventDefault();
-        var url = ($(this).attr("action"));
-        var formVals = ($(this).serializeArray());
+        var url = $(this).attr("action");
+        var formVals = $(this).serializeArray();
         var charIDs = [];
         var memIDs = [];
 
