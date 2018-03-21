@@ -123,15 +123,18 @@
                     {{/if}} {{/if}} {{/../rewardCards}}
                 </select>
                 <br>
-                <input type="submit" class="char-update-submit" id="{{id}}" value="Update {{name}}">
+                <input type="submit" class="updatebtn btn btn-primary char-update-submit" id="{{id}}" value="Update {{name}}">
             </form>
         </div>
     </div>
     {{/if}} {{/groupInfo}}
 </div>
 <div class="row">
-    <div class="col-xs-12">
-        <button class="btn btn-danger btn-block" id="new-session" data-action="/campaign/{{group}}/addsession">Create Session Log</button>
+    <div class="col-xs-6">
+        <button class="btn btn-info btn-block" id="new-session" data-action="/campaign/{{group}}/addsession">Create Session Log</button>
+    </div>
+    <div class='col-xs-6'>
+        <a href='/campaign/{{group}}'><button class='btn btn-primary'>{{group}} Home</button></a>
     </div>
 </div>
 <br>
