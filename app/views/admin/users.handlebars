@@ -1,0 +1,66 @@
+<!--  schedule page   -->
+
+<!--  scripts for Google Maps -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAE03QBe5yDXRr1fzDvkWs9i_E_BIyCDhk&libraries=places" async
+ defer></script>
+<script src="https://apis.google.com/js/api.js" type="text/javascript"></script>
+
+
+
+<h2> Users Listing </h2>
+
+<hr>
+<hr>
+
+<table style="width:100%" class="table table-bordered table-condensed table-hover">
+	<tr>
+		<strong>
+			<th>User id</th>
+			<th>User Name</th>
+			<th>Email as stored</th>
+			<th>Email decrypted</th>
+			<th>Password hash</th>
+		</strong>
+	</tr>
+	{{#each outputLines}}
+	<tr>
+		<td>
+			<h5>{{this.id}}</h5>
+		</td>
+		<td>
+			<h5>{{this.name}}</h5>
+		</td>
+		<td>
+			<h5>{{this.email_hash}}</h5>
+		</td>
+		<td>
+			<h5>{{this.email}}</h5>
+		</td>
+		<td>
+			<h5>{{this.password_hash}}</h5>
+		</td>
+	</tr>
+	{{/each}}
+</table>
+
+
+
+<br/>
+<br/>
+<br/>
+<br/>
+
+<script type="text/javascript" src="../../javascript/numeral.js"></script>
+
+
+
+<script>
+
+	$(document).ready(function () {
+		//document is ready, so move the incoming data over
+	});
+
+	//$(document.body).on("click", ".bttn-store", saveAppoint);
+
+
+</script>
