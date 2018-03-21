@@ -148,134 +148,131 @@ router.get("/:group/addsession", function (req, res) {
 router.get("/:group/:session", function (req, res) {
     console.log(req.session.username);
     var session = req.params.session;
+    var groupID = req.params.group;
     var userIDQ = "SELECT id FROM users WHERE name = ?";
     connection.query(userIDQ, [req.session.username], function (err, thisUserID) {
         console.log(thisUserID[0].id);
         var empireQ = "SELECT empire from user_groups WHERE user_id = ?"
         connection.query(empireQ, [thisUserID[0].id], function (err, isEmpire) {
             console.log(isEmpire[0].empire);
-            var groupQ = "SELECT id FROM groups WHERE name = ?";
-            connection.query(groupQ, [req.params.group], function (err, id) {
-                var groupID = parseInt(id[0].id);
 
-                var ugQuery = "SELECT ug.*, c.name FROM user_groups ug LEFT JOIN characters c ON c.id = ug.character_id WHERE group_id = ?";
-                connection.query(ugQuery, [groupID], function (err, groupInfo) {
+            var ugQuery = "SELECT ug.*, c.name FROM user_groups ug LEFT JOIN characters c ON c.id = ug.character_id WHERE group_id = ?";
+            connection.query(ugQuery, [groupID], function (err, groupInfo) {
 
-                    var cQuery = "SELECT * FROM characters";
-                    connection.query(cQuery, function (err, chars) {
-                        var charCardQuery = "SELECT * FROM game_cards WHERE session_id = ?";
-                        connection.query(charCardQuery, [session], function (err, charCards) {
-                            var charMissionCards = [];
-                            var charDeploymentCards = [];
-                            var charCommandCards = [];
-                            var charRewardCards = [];
-                            var charItemCards = [];
-                            var charSupplyCards = [];
-                            var charClassCards = [];
+                var cQuery = "SELECT * FROM characters";
+                connection.query(cQuery, function (err, chars) {
+                    var charCardQuery = "SELECT * FROM game_cards WHERE session_id = ?";
+                    connection.query(charCardQuery, [session], function (err, charCards) {
+                        var charMissionCards = [];
+                        var charDeploymentCards = [];
+                        var charCommandCards = [];
+                        var charRewardCards = [];
+                        var charItemCards = [];
+                        var charSupplyCards = [];
+                        var charClassCards = [];
 
-                            for (var i = 0; i < charCards.length; i++) {
-                                switch (charCards[i].type) {
+                        for (var i = 0; i < charCards.length; i++) {
+                            switch (charCards[i].type) {
+                                case "Story Mission":
+                                    charMissionCards.push(charCards[i]);
+                                    break;
+
+                                case "Side Mission":
+                                    charMissionCards.push(charCards[i]);
+                                    break;
+
+                                case "Deployment":
+                                    charDeploymentCards.push(charCards[i]);
+                                    break;
+
+                                case "Command":
+                                    charCommandCards.push(charCards[i]);
+                                    break;
+
+                                case "Reward":
+                                    charRewardCards.push(charCards[i]);
+                                    break;
+
+                                case "item":
+                                    charItemCards.push(charCards[i]);
+                                    break;
+
+                                case "supply":
+                                    charSupplyCards.push(charCards[i]);
+                                    break;
+
+                                case "class":
+                                    charClassCards.push(charCards[i]);
+                                    break;
+                            }
+                        };
+                        var gameCardQuery = "SELECT * FROM game_cards WHERE session_id = ?";
+                        connection.query(gameCardQuery, [session], function (err, gameCards) {
+                            var gameMissionCards = [];
+                            var gameDeploymentCards = [];
+                            var gameCommandCards = [];
+                            var gameRewardCards = [];
+                            var gameItemCards = [];
+                            var gameSupplyCards = [];
+                            var gameClassCards = [];
+
+                            for (var i = 0; i < gameCards.length; i++) {
+                                switch (gameCards[i].type) {
                                     case "Story Mission":
-                                        charMissionCards.push(charCards[i]);
+                                        gameMissionCards.push(gameCards[i]);
                                         break;
 
                                     case "Side Mission":
-                                        charMissionCards.push(charCards[i]);
+                                        gameMissionCards.push(gameCards[i]);
                                         break;
 
                                     case "Deployment":
-                                        charDeploymentCards.push(charCards[i]);
+                                        gameDeploymentCards.push(gameCards[i]);
                                         break;
 
                                     case "Command":
-                                        charCommandCards.push(charCards[i]);
+                                        gameCommandCards.push(gameCards[i]);
                                         break;
 
                                     case "Reward":
-                                        charRewardCards.push(charCards[i]);
+                                        gameRewardCards.push(gameCards[i]);
                                         break;
 
                                     case "item":
-                                        charItemCards.push(charCards[i]);
+                                        gameItemCards.push(gameCards[i]);
                                         break;
 
                                     case "supply":
-                                        charSupplyCards.push(charCards[i]);
+                                        gameSupplyCards.push(gameCards[i]);
                                         break;
 
                                     case "class":
-                                        charClassCards.push(charCards[i]);
+                                        gameClassCards.push(gameCards[i]);
                                         break;
                                 }
                             };
-                            var gameCardQuery = "SELECT * FROM game_cards WHERE session_id = ?";
-                            connection.query(gameCardQuery, [session], function (err, gameCards) {
-                                var gameMissionCards = [];
-                                var gameDeploymentCards = [];
-                                var gameCommandCards = [];
-                                var gameRewardCards = [];
-                                var gameItemCards = [];
-                                var gameSupplyCards = [];
-                                var gameClassCards = [];
 
-                                for (var i = 0; i < gameCards.length; i++) {
-                                    switch (gameCards[i].type) {
-                                        case "Story Mission":
-                                            gameMissionCards.push(gameCards[i]);
-                                            break;
-
-                                        case "Side Mission":
-                                            gameMissionCards.push(gameCards[i]);
-                                            break;
-
-                                        case "Deployment":
-                                            gameDeploymentCards.push(gameCards[i]);
-                                            break;
-
-                                        case "Command":
-                                            gameCommandCards.push(gameCards[i]);
-                                            break;
-
-                                        case "Reward":
-                                            gameRewardCards.push(gameCards[i]);
-                                            break;
-
-                                        case "item":
-                                            gameItemCards.push(gameCards[i]);
-                                            break;
-
-                                        case "supply":
-                                            gameSupplyCards.push(gameCards[i]);
-                                            break;
-
-                                        case "class":
-                                            gameClassCards.push(gameCards[i]);
-                                            break;
-                                    }
-                                };
-
-                                res.render("../app/views/campaign/session-view", {
-                                    logged_in: req.session.logged_in,
-                                    user_name: req.session.username,
-                                    group: req.params.group,
-                                    isEmpire: isEmpire[0].empire,
-                                    groupInfo: groupInfo,
-                                    characters: chars,
-                                    charMissionCards: charMissionCards,
-                                    charDeploymentCards: charDeploymentCards,
-                                    charCommandCards: charCommandCards,
-                                    charItemCards: charItemCards,
-                                    charSupplyCards: charSupplyCards,
-                                    charClassCards: charClassCards,
-                                    charRewardCards: charRewardCards,
-                                    gameMissionCards: gameMissionCards,
-                                    gameDeploymentCards: gameDeploymentCards,
-                                    gameCommandCards: gameCommandCards,
-                                    gameItemCards: gameItemCards,
-                                    gameSupplyCards: gameSupplyCards,
-                                    gameClassCards: gameClassCards,
-                                    gameRewardCards: gameRewardCards
-                                });
+                            res.render("../app/views/campaign/session-view", {
+                                logged_in: req.session.logged_in,
+                                user_name: req.session.username,
+                                group: req.params.group,
+                                isEmpire: isEmpire[0].empire,
+                                groupInfo: groupInfo,
+                                characters: chars,
+                                charMissionCards: charMissionCards,
+                                charDeploymentCards: charDeploymentCards,
+                                charCommandCards: charCommandCards,
+                                charItemCards: charItemCards,
+                                charSupplyCards: charSupplyCards,
+                                charClassCards: charClassCards,
+                                charRewardCards: charRewardCards,
+                                gameMissionCards: gameMissionCards,
+                                gameDeploymentCards: gameDeploymentCards,
+                                gameCommandCards: gameCommandCards,
+                                gameItemCards: gameItemCards,
+                                gameSupplyCards: gameSupplyCards,
+                                gameClassCards: gameClassCards,
+                                gameRewardCards: gameRewardCards
                             });
                         });
                     });
@@ -284,6 +281,7 @@ router.get("/:group/:session", function (req, res) {
         });
     });
 });
+
 
 router.post("/:group/characters", function (req, res) {
     var userIDs = req.body.memids;
