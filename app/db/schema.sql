@@ -36,13 +36,29 @@ CREATE TABLE cards (
     primary key (id)
 );
 
-CREATE TABLE game_cards (
+CREATE TABLE session (
     id INT NOT NULL AUTO_INCREMENT,
-    name VARCHAR(255),
-    type VARCHAR(255),
+    group_id INT,
+    credits INT,
+    picture VARCHAR(255),
+    game_date_start_unix INT(13),
+    game_date_stop_unix INT(13),
+    FOREIGN KEY (group_id) REFERENCES groups(id),
+    primary key (id)
+);
+
+CREATE TABLE game_cards (
+    card_id INT,
+    user_id INT,
+    group_id INT,
+    session_id INT,
     credits INT,
     empire BOOLEAN DEFAULT false,
-    primary key (id)
+    foreign key (group_id) references groups(id),
+    foreign key (user_id) references users(id),
+    foreign key (card_id) references game_cards(id),
+    foreign key (session_id) references session(id)
+    
 );
 
 CREATE TABLE character_cards (
@@ -50,21 +66,13 @@ CREATE TABLE character_cards (
     user_id INT,
     character_id INT,
     card_id INT,
+    session_id INT,
     xp INT,
     foreign key (character_id) references characters(id),
     foreign key (group_id) references groups(id),
     foreign key (user_id) references users(id),
-    foreign key (card_id) references game_cards(id)
-);
-
-CREATE TABLE session (
-    id INT,
-    group_id INT,
-    credits INT,
-    picture VARCHAR(255),
-    game_date_start_unix INT(13),
-    game_date_stop_unix INT(13),
-    FOREIGN KEY (group_id) REFERENCES groups(id)
+    foreign key (card_id) references game_cards(id),
+    foreign key (session_id) references session(id)
 );
 
 CREATE TABLE scheduled (
