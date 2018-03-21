@@ -108,6 +108,44 @@ router.get("/:group/main", function (req, res) {
     });
 });
 
+router.get("/:group/addsession", function (req, res) {
+    var groupName = req.params.group;
+console.log(groupName);
+    var groupNameQ = "SELECT id FROM groups WHERE name = ?"
+    connection.query(groupNameQ, [groupName], function (err, groupI) {
+
+        var groupID = groupI[0].name;
+
+        var newSession = "INSERT INTO session (group_id) VALUES (?)"
+        connection.query(newSession, [groupID], function (err, sessionInsert) {
+
+            var getSession = "SELECT MAX(id) from session WHERE group_id = ?";
+            connection.query(getSession, [groupID], function (req, session) {
+
+                var sessionID = session[0].id;
+
+                var gameCardQ = "UPDATE game_cards SET session_id = ? WHERE session_id = NULL";
+                connection.query(gameCardQ, [sessionID], function (err, updateGame) {
+
+                    var charCardQ = "UPDATE character_cards SET session_id = ? WHERE session_id = NULL";
+                    connection.query(charCardQ, [sessionID], function (err, updateChar) {
+
+                        var sessionsQ = "SELECT * FROM session WHERE group_id = ?";
+                        connection.query(sessionsQ, [groupID], function (err, sessions) {
+
+                            res.render("../app/views/campaign/show-sessions", {
+                                group_id: groupID,
+                                group_name: groupName,
+                                sessions: sessions
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
+});
+
 router.post("/:group/characters", function (req, res) {
     var userIDs = req.body.memids;
     var charIDs = req.body.charids;
@@ -154,6 +192,7 @@ router.post("/:group/imperialupdate", function (req, res) {
 
     var gIDQuery = "SELECT id FROM groups WHERE name = ?";
     connection.query(gIDQuery, [groupName], function (err, gID) {
+
         groupID = gID[0].id;
 
         var impGameCardAdd = "INSERT INTO game_cards (group_id, card_id, empire) VALUES (?, ?, ?)";
@@ -161,33 +200,88 @@ router.post("/:group/imperialupdate", function (req, res) {
 
         function cardAdd() {
             connection.query(impGameCardAdd, [groupID, parseInt(imperialCards[addIndex]), true], function (err, cardsAdded) {
-                if (index < (imperialCards.length - 1)) {
-                    index++;
+                if (addIndex < (imperialCards.length - 1)) {
+                    addIndex++;
                     cardAdd();
                 } else {
                     return
                 }
             });
         }
-
-        var impGameCardQuery = "DELETE FROM game_cards WHERE group_id = ? AND session_id = NULL AND card_id = ?";
-
-        function cardDelete() {
-            var delIndex = 0
-            connection.query(impGameCardQuery, [groupID, parseInt(imperialCards[delIndex])], function (err, deleted) {
-                if (delIndex < (imperialCards.length - 1)) {
-                    delindex++;
-                    cardDelete();
-                } else {
-                    cardAdd()
-                }
-            });
-        }
-        cardDelete();
+        cardAdd()
 
         res.sendStatus(200);
     });
 });
+
+router.post("/:group/allyupdate", function (req, res) {
+    var allyCards = req.body.ally_cards;
+    var groupName = req.body.group;
+    var credits = req.body.credits;
+    var groupID;
+
+    console.log(req.body);
+
+    var gIDQuery = "SELECT id FROM groups WHERE name = ?";
+    connection.query(gIDQuery, [groupName], function (err, gID) {
+
+        groupID = gID[0].id;
+
+        var allyGameCardAdd = "INSERT INTO game_cards (group_id, card_id, credits) VALUES (?, ?, ?)";
+        var addIndex = 0;
+
+        function cardAdd() {
+            connection.query(allyGameCardAdd, [groupID, parseInt(allyCards[addIndex]), credits], function (err, cardsAdded) {
+                if (addIndex < (allyCards.length - 1)) {
+                    addIndex++;
+                    cardAdd();
+                } else {
+                    return
+                }
+            });
+        }
+        cardAdd()
+
+        res.sendStatus(200);
+    });
+});
+
+router.post("/:groupid/:charid", function (req, res) {
+    var charCards = req.body.char_cards;
+    var groupID = parseInt(req.params.groupid);
+    var character = parseInt(req.params.charid);
+    var xp = parseInt(req.body.xp);
+
+    console.log(req.body);
+
+
+
+
+    var userIDQuery = "SELECT user_id FROM user_groups WHERE group_id = ? AND character_id = ?";
+    connection.query(userIDQuery, [groupID, character], function (err, user) {
+
+        var userID = user[0].user_id;
+
+        var charGameCardAdd = "INSERT INTO character_cards (group_id, user_id, character_id, card_id, xp) VALUES (?, ?, ?, ?, ?)";
+        var addIndex = 0;
+
+        function cardAdd() {
+            connection.query(charGameCardAdd, [groupID, userID, character, parseInt(charCards[addIndex]), xp], function (err, cardsAdded) {
+
+                if (addIndex < (charCards.length - 1)) {
+                    addIndex++;
+                    cardAdd();
+                } else {
+                    return
+                }
+            });
+        }
+        cardAdd()
+
+        res.sendStatus(200);
+    });
+});
+
 
 
 
