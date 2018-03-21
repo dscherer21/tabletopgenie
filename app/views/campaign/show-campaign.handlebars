@@ -95,26 +95,26 @@
         <div class="panel panel-default">
             <h4>{{name}}</h4>
             <h5>Available xp: </h5>
-            <form class="char-update-form" data-action="campaign/{{group}}/{{id}}">
-                <input type="hidden" name="group" value="{{group}}">
+            <form class="char-update-form" data-action="/campaign/{{group_id}}/{{character_id}}">
+                <input type="hidden" name="group" value="{{../group}}">
                 <p>XP</p>
                 <input type="text" name="xp" id="xp" placeholder="XP">
                 <br>
                 <br>
                 <p>Class Cards</p>
-                <select multiple name="class-cards,{{id}}">
+                <select multiple name="class-cards">
                     {{#../classCards}} {{#if empire}} {{else}} {{#if_eq deck ../name}}
                     <option value="{{id}},{{cost}}">{{name}} {{cost}}xp</option>
                     {{/if_eq}} {{/if}} {{/../classCards}}
                 </select>
                 <p>Item Cards</p>
-                <select multiple name="item-cards,{{id}}">
+                <select multiple name="item-cards">
                     {{#../itemCards}}
                     <option value="{{id}},{{cost}}">{{name}} t{{tier}} credits: {{cost}} </option>
                     {{/../itemCards}}
                 </select>
                 <p>Reward Cards</p>
-                <select multiple name="reward-cards,{{id}}">
+                <select multiple name="reward-cards">
                     <option></option>
                     {{#../rewardCards}} {{#if empire}} {{else}} {{#if deck}} {{#if_eq deck ../name}}
                     <option value="{{id}}">{{name}}</option>
@@ -163,16 +163,13 @@
             imperial_cards: imperialCards
         }, function (data, success) {
             console.log(data);
-        });)
-
-
+        });
     });
 
     $(document.body).on("submit", "#group-cards-form", function (event) {
         event.preventDefault();
-        var allyIDs = [];
+        var allyCards = [];
         var allyNames = [];
-        var missionID;
         var missionName;
         var group = "";
         var url = $(this).attr("data-action");
@@ -187,11 +184,11 @@
             } else if (i === 2) {
                 var missionArr = allyFormVals[i].value.split(",");
                 missionName = missionArr[0];
-                missionID = parseInt(missionArr[1]);
+                allyCards.push(parseInt(missionArr[1]));
             } else {
                 var allyArr = allyFormVals[i].value.split(",");
-                allyIDs.push(allyArr[1]);
                 allyNames.push(allyArr[0]);
+                allyCards.push(allyArr[1]);
             }
         }
         $("#session-mission").text(missionName);
@@ -206,41 +203,62 @@
             }
             $("#session-allies").text(alliesString);
         }
+
+        $.post(url, {
+            group: group,
+            ally_cards: allyCards,
+            credits: credits
+        }, function (data, success) {
+            console.log(data);
+        });
     });
 
     $(document.body).on("submit", ".char-update-form", function (event) {
         event.preventDefault();
         var gainedXP;
         var usedXP;
-        var classCards = [];
-        var itemCards = [];
-        var rewardCards = [];
+        var charCards = [];
         var group = "";
         var charFormVals = $(this).serializeArray();
         console.log(charFormVals);
         var url = $(this).attr("data-action");
+        console.log(url);
 
         for (var i = 0; i < charFormVals.length; i++) {
             if (i === 0) {
                 group = charFormVals[i].value;
             } else if (i === 1) {
                 gainedXP = parseInt(charFormVals[i].value);
-            } else if (charformvals[i].name === "class-cards") {
+            } else if (charFormVals[i].name === "class-cards") {
                 var classArr = charFormVals[i].value.split(",");
-                classCards.push(missionArr[0]);
-                usedXP = parseInt(missionArr[1]);
-            } else if (charformvals[i].name === "item-cards") {
-                var classArr = charFormVals[i].value.split(",");
-                itemCards.push(missionArr[0]);
-                usedCredits = parseInt(missionArr[1]);
+                charCards.push(classArr[0]);
+                usedXP = parseInt(classArr[1]);
+            } else if (charFormVals[i].name === "item-cards") {
+                var itemArr = charFormVals[i].value.split(",");
+                charCards.push(itemArr[0]);
+                usedCredits = parseInt(itemArr[1]);
             }
             else {
-                rewardCards.push(charFormVals[i].value);
+                charCards.push(charFormVals[i].value);
             }
         }
+        var xp = gainedXP - usedXP;
+
+        $.post(url, {
+            group: group,
+            char_cards: charCards,
+            used_credits: credits,
+            xp: xp
+        }, function (data, success) {
+            console.log(data);
+        });
 
     });
 
-
+$(document.body).on("click", "#new-session", function(event){
+    event.preventDefault();
+    var url = $(this).attr("data-action");
+    window.location.href = url;
+});
 
 </script>
