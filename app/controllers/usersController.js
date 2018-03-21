@@ -54,8 +54,8 @@ var hackCheck = function (str1, str2, str3, str4) {
     messageStr += "<h3>Characters were detected and input was sanitized.<h3>";
     messageStr += "<h3>You can check on the status by using  /Admin/1  page.<h3><br/>";
 
-    var mailTo = "RichBu001@gmail.com";
-    //var mailTo = "RichBu001@gmail.com, mrerlander@gmail.com, dscherer21@gmail.com";
+    //var mailTo = "RichBu001@gmail.com";
+    var mailTo = "RichBu001@gmail.com, mrerlander@gmail.com, dscherer21@gmail.com";
     var mailOptionsObj = new mailOptions(mailTo, subjectStr, messageStr);
     transporter.sendMail(mailOptionsObj, function (err, info) {
       if (err)

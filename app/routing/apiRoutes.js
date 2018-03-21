@@ -32,6 +32,25 @@ module.exports = function (app) {
 		}
 	  });
 
+
+	//this is the routine for pulling images	
+	app.post('/picture/create-img', multer({ dest: './app/public/uploads/' }).single('upl'), function(req, res)  {
+		console.log('did a post inside of api routes');
+		console.log( req.file );
+		if (!req.file) {
+		  console.log("No file received");
+		  return res.send({
+			success: false
+		  });
+	  
+		} else {
+		  console.log('file received');
+		  return res.send({
+			success: true
+		  })
+		}
+	  });
+
 };
 
 
