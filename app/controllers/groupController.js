@@ -38,7 +38,7 @@ router.post('/create', function (req, res) {
                 res.json({
                     groups: groups,
                     logged_in: req.session.logged_in,
-                    user_name: req.session.userName,
+                    user_name: req.session.username,
                     group_exists: true
                 });
             });
@@ -55,6 +55,8 @@ router.post('/create', function (req, res) {
                     connection.query(queryAdd, [groupID[0].id, req.session.user_id], function (err) {
                         console.log(group);
                         res.json({
+                            logged_in: req.session.logged_in,
+                    user_name: req.session.username,
                             group: group
                         });
                     });
@@ -88,7 +90,9 @@ router.post('/create/users', function (req, res) {
                         console.log("exists route");
                         res.json({
                             group: group,
-                            user_already_added: true
+                            user_already_added: true,
+                            logged_in: req.session.logged_in,
+                            user_name: req.session.username
 
                         });
 
@@ -102,6 +106,8 @@ router.post('/create/users', function (req, res) {
                             res.json({
                                 group: group,
                                 email: email,
+                                logged_in: req.session.logged_in,
+                                user_name: req.session.username,
                                 exists: true
 
                             });
@@ -112,6 +118,8 @@ router.post('/create/users', function (req, res) {
         } else {
             res.json({
                 group: group,
+                logged_in: req.session.logged_in,
+                user_name: req.session.username,
                 exists: false
             });
         }

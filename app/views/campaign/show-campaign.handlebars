@@ -1,77 +1,246 @@
-<div class="container">
-    <div class="row">
-        <div class="col-md-6 col-xs-12 panel panel-default">
-            <form id="group-cards-form">
-                <input type="hidden" name="group" id="group" value="{{this.group}}">
+ {{#if isEmpire}}
+<div class="row">
+    <div class="col-xs-12 text-center">
+        <div class="panel panel-default">
+            <form id="empire-group-cards-form" data-action="/campaign/{{group}}/imperialupdate/">
+                <input type="hidden" name="group" value="{{group}}">
+                <p>Agenda Cards</p>
+                <select name="agenda" id="agenda" class="form-control">
+                    <option></option>
+                    {{#classCards}} {{#if empire}}
+                    <option value="{{id}}">{{name}} ({{deck}})</option>
+                    {{/if}} {{/classCards}}
+                </select>
+                <p>Imperial Deployment Cards</p>
+                <select multiple name="imperials" id="imperials" class="form-control">
+                    {{#deploymentCards}} {{#if empire}}
+                    <option value="{{id}}">{{name}}</option>
+                    {{/if}} {{/deploymentCards}}
+                </select>
+                <br>
+                <br>
+                <input type="submit" id="imperialSubmitButton" value="Update Imperial Game Cards">
+            </form>
+        </div>
+    </div>
+</div>
+{{/if}} {{#if isEmpire}}
+<div class="row">
+    <div class="col-xs-12 text-center">
+        <div class="panel panel-default">
+            <form id="group-cards-form" data-action="/campaign/{{group}}/allyupdate/">
+                <input type="hidden" name="group" value="{{group}}">
+                <p>Credits</p>
+                <input type="text" name="credits" id="credits" placeholder="credits">
+                <br>
+                <br>
+                <p>Mission Cards</p>
                 <select name="mission" id="mission" class="form-control">
-                    <option disabled>Mission Cards</option>
+                    <option></option>
                     {{#missionCards}}
-                    <option value="mission{{id}}">{{name}} {{type}}</option>
+                    <option value="{{name}},{{id}}">{{name}} {{type}}</option>
                     {{/missionCards}}
                 </select>
                 <br>
+                <p>Deployment Cards</p>
                 <select multiple name="allies" id="allies" class="form-control">
-                    <option disabled>Deployment Cards</option>
                     {{#deploymentCards}} {{#if empire}} {{else}}
-                    <option value="deployment{{id}}">{{name}}</option>
+                    <option value="{{name}},{{id}}">{{name}}</option>
                     {{/if}} {{/deploymentCards}}
                 </select>
-            </form>
-            <br>
-            <input type="text" name="credits" id="credits" placeholder="credits">
-            <br>
-            <br>
-            <input type="submit" id="submitButton" value="Update Mission, Deployments, and Credits">
+                <br>
+                <br>
+                <input type="submit" id="allySubmitButton" value="Update Mission, Deployments, and Credits">
             </form>
             <!--post to group_cards-->
         </div>
-
-        <div class="col-md-6 col-xs-12 panel panel-default">
-            <h3 id="current-mission"></h3>
-            <h3 id="current-deployments"></h3>
-            <h3 id="current-credits"></h3>
-
+    </div>
+</div>
+{{/if}}
+<div class="row">
+    <div class="col-xs-12 text-center">
+        <div class=" panel panel-default">
+            <h3 id="current-mission">Current Mission</h3>
+            <p id="session-mission">Aftermath</p>
+            <h3 id="current-deployments">Current Allies</h3>
+            <p id="session-allies">None</p>
+            <h3 id="current-credits">Current Credits</h3>
+            <p id="session-credits">None</p>
         </div>
     </div>
-    <div class="row">
-        {{#groupInfo}} {{#if empire}} {{else}}
-        <div class="col-xs-3">
-            <h4>{{name}}</h4>
-            <h5>Available xp: </h5>
+</div>
+{{#if isEmpire}}
+<div class="row">
+    <div class="col-xs-12 text-center">
+        <div class="panel panel-default">
+            <h4>Empire</h4>
             <form id="user{{user_id}}">
-                <select multiple name="class-cards{{user_id}}">
-                    {{#../classCards}} {{#if empire}} {{else}}
-                    {{#if_eq deck ../name}}
-                    <option value="{{id}}" data-cost"{{cost}}">{{name}} {{cost}}xp</option>
-                    {{/if_eq}}
-                    {{/if}} {{/../classCards}}
-                </select>
-                <select multiple name="item-cards{{user_id}}">
-                    {{#../itemCards}}
-                    <option value="{{id}}" data-cost="{{cost}}">{{name}} tier: {{tier}} credits: {{cost}} </option>
-                    {{/../itemCards}}
-                </select>
+                <input type="hidden" name="group" value="{{group}}">
+                <p>Imperial Reward Cards</p>
                 <select multiple name="reward-cards{{user_id}}">
-                    {{#../rewardCards}}
-                    {{#if empire}} {{else}}
-                    {{#if deck}}
-                    {{#if_eq deck ../name}}
+                    {{#rewardCards}} {{#if empire}}
                     <option value="{{id}}">{{name}}</option>
-                    {{/if_eq}}
-                    {{else}}
-                    <option value="{{id}}">{{name}}</option>
-                    {{/if}}
-                    {{/if}}
-                    {{/../rewardCards}}
+                    {{/if}} {{/rewardCards}}
                 </select>
-                <input type="submit" class="char-update-submit" value="Update {{name}}">
+                <br>
+                <input type="submit" class="empire-update-submit" value="Update {{name}}">
             </form>
         </div>
-        {{/if}}
-        {{/groupInfo}}
+    </div>
+</div>
+{{/if}}
+<div class="row">
+    {{#groupInfo}} {{#if empire}} {{else}}
+    <div class="col-xs-12 col-md-3 text-center">
+        <div class="panel panel-default">
+            <h4>{{name}}</h4>
+            <h5>Available xp: </h5>
+            <form class="char-update-form" data-action="campaign/{{group}}/{{id}}">
+                <input type="hidden" name="group" value="{{group}}">
+                <p>XP</p>
+                <input type="text" name="xp" id="xp" placeholder="XP">
+                <br>
+                <br>
+                <p>Class Cards</p>
+                <select multiple name="class-cards,{{id}}">
+                    {{#../classCards}} {{#if empire}} {{else}} {{#if_eq deck ../name}}
+                    <option value="{{id}},{{cost}}">{{name}} {{cost}}xp</option>
+                    {{/if_eq}} {{/if}} {{/../classCards}}
+                </select>
+                <p>Item Cards</p>
+                <select multiple name="item-cards,{{id}}">
+                    {{#../itemCards}}
+                    <option value="{{id}},{{cost}}">{{name}} t{{tier}} credits: {{cost}} </option>
+                    {{/../itemCards}}
+                </select>
+                <p>Reward Cards</p>
+                <select multiple name="reward-cards,{{id}}">
+                    <option></option>
+                    {{#../rewardCards}} {{#if empire}} {{else}} {{#if deck}} {{#if_eq deck ../name}}
+                    <option value="{{id}}">{{name}}</option>
+                    {{/if_eq}} {{else}}
+                    <option value="{{id}}">{{name}}</option>
+                    {{/if}} {{/if}} {{/../rewardCards}}
+                </select>
+                <br>
+                <input type="submit" class="char-update-submit" id="{{id}}" value="Update {{name}}">
+            </form>
+        </div>
+    </div>
+    {{/if}} {{/groupInfo}}
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <button class="btn btn-danger btn-block" id="new-session" data-action="/campaign/{{group}}/addsession">Create Session Log</button>
     </div>
 </div>
 <br>
 <br>
 <br>
 <br>
+
+<script>
+    var credits;
+    var usedCredits;
+
+    $(document.body).on("submit", "#empire-group-cards-form", function (event) {
+        event.preventDefault();
+        var imperialCards = [];
+        var group = "";
+        var url = $(this).attr("data-action");
+        var imperialFormVals = $(this).serializeArray();
+        console.log(imperialFormVals);
+        for (var i = 0; i < imperialFormVals.length; i++) {
+            if (i === 0) {
+                group = imperialFormVals[i].value;
+            } else {
+                imperialCards.push(imperialFormVals[i].value);
+            }
+        }
+
+        $.post(url, {
+            group: group,
+            imperial_cards: imperialCards
+        }, function (data, success) {
+            console.log(data);
+        });)
+
+
+    });
+
+    $(document.body).on("submit", "#group-cards-form", function (event) {
+        event.preventDefault();
+        var allyIDs = [];
+        var allyNames = [];
+        var missionID;
+        var missionName;
+        var group = "";
+        var url = $(this).attr("data-action");
+        var allyFormVals = $(this).serializeArray();
+        console.log(allyFormVals);
+
+        for (var i = 0; i < allyFormVals.length; i++) {
+            if (i === 0) {
+                group = allyFormVals[i].value;
+            } else if (i === 1) {
+                credits = parseInt(allyFormVals[i].value);
+            } else if (i === 2) {
+                var missionArr = allyFormVals[i].value.split(",");
+                missionName = missionArr[0];
+                missionID = parseInt(missionArr[1]);
+            } else {
+                var allyArr = allyFormVals[i].value.split(",");
+                allyIDs.push(allyArr[1]);
+                allyNames.push(allyArr[0]);
+            }
+        }
+        $("#session-mission").text(missionName);
+        $("#session-credits").text(credits);
+        var alliesString = "";
+
+        for (var i = 0; i < allyNames.length; i++) {
+            if (i === 0) {
+                alliesString += allyNames[i];
+            } else {
+                alliesString += (", " + allyNames[i]);
+            }
+            $("#session-allies").text(alliesString);
+        }
+    });
+
+    $(document.body).on("submit", ".char-update-form", function (event) {
+        event.preventDefault();
+        var gainedXP;
+        var usedXP;
+        var classCards = [];
+        var itemCards = [];
+        var rewardCards = [];
+        var group = "";
+        var charFormVals = $(this).serializeArray();
+        console.log(charFormVals);
+        var url = $(this).attr("data-action");
+
+        for (var i = 0; i < charFormVals.length; i++) {
+            if (i === 0) {
+                group = charFormVals[i].value;
+            } else if (i === 1) {
+                gainedXP = parseInt(charFormVals[i].value);
+            } else if (charformvals[i].name === "class-cards") {
+                var classArr = charFormVals[i].value.split(",");
+                classCards.push(missionArr[0]);
+                usedXP = parseInt(missionArr[1]);
+            } else if (charformvals[i].name === "item-cards") {
+                var classArr = charFormVals[i].value.split(",");
+                itemCards.push(missionArr[0]);
+                usedCredits = parseInt(missionArr[1]);
+            }
+            else {
+                rewardCards.push(charFormVals[i].value);
+            }
+        }
+
+    });
+
+
+
+</script>
