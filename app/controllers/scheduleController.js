@@ -51,70 +51,94 @@ function sessionOutputObj(_schedId, _groupId, _group_name, _date_start, _date_st
 console.log('schedule controller is loaded...');
 
 //this is the scheduleController.js file
-router.get('/:group_id', function (req, res) {
+router.get('/:group_name', function (req, res) {
     console.log("hit the main schedule page");
     //console.log(req.session.user_id);
     //console.log(req.session.username);
     //console.log(req.params.group_id);
-    req.session.group_id = req.params.group_id;
+    //req.session.group_id = req.params.group_id;
 
-    var groupId = req.params.group_id;
+
+    var groupName = req.params.group_name;
+    console.log(groupName);
+
+    var groupId;
+    //    var groupId = req.session.group_id;
     var sessionsOutput = [];
     var scheduledOutput = [];
     var isSchedOutput = false;
 
-    var queryStr = "SELECT * FROM (SELECT * FROM user_groups a LEFT JOIN groups b ON a.group_id = b.id WHERE a.group_id = ? AND a.user_id = ?) c LEFT JOIN session d ON c.group_id=d.group_id";
+    var queryStr = "SELECT * FROM groups a WHERE a.name = ?";
 
-    connection.query(queryStr, [groupId, req.session.user_id], function (err, response) {
-        //all of the sessions of previous times pulled out
-        for (var i = 0; i < response.length; i++) {
-            //loop thru all of the responses
-            sessionsOutput.push(new sessionOutputObj(
-                i,                 //normally the spot for schedule id
-                groupId,
-                response[i].name,  //this is group name
-                response[i].game_date_start_unix,
-                response[i].game_date_stop_unix,
-                response[i].picture,
-                ""
-            ));
+    connection.query(queryStr, [groupName], function (err, response) {
+        console.log(err);
+        console.log("len = " + response.length);
+        if (response.length === 0) {
+            //no reason there would not be a match
+            console.log("not found error in schedule controller");
+            return;
+        } else {
+            groupId = response[0].id;
+            req.session.groupId = groupId
         };
+        console.log("group id = " + groupId);
 
-        //check to see if there are any future "scheduled" sessions
-        var queryStr2 = "SELECT * FROM (SELECT * FROM user_groups a LEFT JOIN groups b ON a.group_id = b.id WHERE a.group_id = ? AND a.user_id = ?) c LEFT JOIN scheduled d ON c.group_id=d.group_id";
 
-        connection.query(queryStr2, [groupId, req.session.user_id], function (err2, response2) {
-            if (response2.length === 0 || response2 == undefined || response2[0].id == null) {
-                //there are no future sessions
-                isSchedOutput = false;
-            } else {
-                //load up the scheduledOutput
-                isSchedOutput = true;
-                for (var i = 0; i < response2.length; i++) {
-                    //loop thru all of the responses
-                    scheduledOutput.push(new sessionOutputObj(
-                        response2[i].id,         //sched id for deleting
-                        groupId,
-                        response2[i].name,
-                        response2[i].game_date_start_unix,
-                        response2[i].game_date_stop_unix,
-                        "",
-                        response2[i].locat
-                    ));
-                };
+
+        var queryStr = "SELECT * FROM (SELECT * FROM user_groups a LEFT JOIN groups b ON a.group_id = b.id WHERE a.group_id = ? AND a.user_id = ?) c LEFT JOIN session d ON c.group_id=d.group_id";
+
+        console.log("group=" + groupId + "user=" + req.session.user_id);
+        connection.query(queryStr, [groupId, req.session.user_id], function (err, response) {
+            //all of the sessions of previous times pulled out
+            for (var i = 0; i < response.length; i++) {
+                //loop thru all of the responses
+                sessionsOutput.push(new sessionOutputObj(
+                    i,                 //normally the spot for schedule id
+                    groupId,
+                    response[i].name,  //this is group name
+                    response[i].game_date_start_unix,
+                    response[i].game_date_stop_unix,
+                    response[i].picture,
+                    ""
+                ));
             };
-            res.render('../app/views/schedule/main', {
-                user_email: req.session.user_email,
-                logged_in: req.session.logged_in,
-                user_name: req.session.username,
-                group: req.params.group,
-                group_id: groupId,
-                start_date: moment().format("MM/DD/YYYY"),
-                start_time: moment().format("hh:mm a"),
-                stop_time: moment().format("hh:mm a"),
-                outputLines: sessionsOutput,
-                schedLines: scheduledOutput,
-                isSchedOutput: isSchedOutput
+
+            //check to see if there are any future "scheduled" sessions
+            var queryStr2 = "SELECT * FROM (SELECT * FROM user_groups a LEFT JOIN groups b ON a.group_id = b.id WHERE a.group_id = ? AND a.user_id = ?) c LEFT JOIN scheduled d ON c.group_id=d.group_id";
+
+            connection.query(queryStr2, [groupId, req.session.user_id], function (err2, response2) {
+                if (response2.length === 0 || response2 == undefined || response2[0].id == null) {
+                    //there are no future sessions
+                    isSchedOutput = false;
+                } else {
+                    //load up the scheduledOutput
+                    isSchedOutput = true;
+                    for (var i = 0; i < response2.length; i++) {
+                        //loop thru all of the responses
+                        scheduledOutput.push(new sessionOutputObj(
+                            response2[i].id,         //sched id for deleting
+                            groupId,
+                            response2[i].name,
+                            response2[i].game_date_start_unix,
+                            response2[i].game_date_stop_unix,
+                            "",
+                            response2[i].locat
+                        ));
+                    };
+                };
+                res.render('../app/views/schedule/main', {
+                    user_email: req.session.user_email,
+                    logged_in: req.session.logged_in,
+                    user_name: req.session.username,
+                    group: req.params.group,
+                    group_id: groupId,
+                    start_date: moment().format("MM/DD/YYYY"),
+                    start_time: moment().format("hh:mm a"),
+                    stop_time: moment().format("hh:mm a"),
+                    outputLines: sessionsOutput,
+                    schedLines: scheduledOutput,
+                    isSchedOutput: isSchedOutput
+                });
             });
         });
     });
