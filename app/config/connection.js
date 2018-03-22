@@ -2,13 +2,13 @@
 var mysql = require("mysql");
 var app = require('../../server');
 
-var connection = mysql.createConnection({
+/*var connection = mysql.createConnection({
     port: 3306,
     host: "localhost",
     user: "root",
     password: "",
     database: "Imperial_Assault_db"
-});
+});*/
 
 // Make connection.
 connection.connect(function (err) {
@@ -19,16 +19,17 @@ connection.connect(function (err) {
     console.log("connected as id " + connection.threadId);
 });
 //To run Database on JAWSDB
-/*if (process.env.JAWSDB_URL) {
+if (process.env.JAWSDB_URL) {
     connection = mysql.createConnection(process.env.JAWSDB_URL);
 } else {
     connection = mysql.createConnection({
+        port:3306
         host: 'localhost',
         user: 'root',
-        password: 'hacktheplanet',
-        database: 'todoagain_bd'
+        password: '',
+        database: 'Imperial_Assault_DB'
     });
-};*/
+};
 
 
 // Export connection for our ORM to use.
