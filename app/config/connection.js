@@ -18,7 +18,7 @@ if (process.env.JAWSDB_URL) {
         host: 'localhost',
         user: 'root',
         password: '',
-        database: 'Imperial_Assault_DB'
+        database: 'z2znazc687xl2iem'
     });
 };
 
