@@ -1,81 +1,75 @@
+<p>
+	CAMERA</p>
 
-	<p>CAMERA</p>
 
+<video id="video" width="320" height="240" autoplay></video>
+<button id="snapButton">Snap Photo</button>
+<canvas id="canvas" width="320" height="240"></canvas>
+<br/>
+<br/>
+<img class "img-item" id="snap">
 
-	<video id="video" width="320" height="240" autoplay></video>
-	<button id="snapButton">Snap Photo</button>
-	<canvas id="canvas" width="320" height="240"></canvas>
+<form action="/picture/create" enctype="multipart/form-data" method="post" id="form">
+	<input type="text" name="title">
 	<br/>
+	<input type="file" name="upl" id="filename">
 	<br/>
-	<img class"img-item" id="snap">
-
-	<form action="/picture/create" enctype="multipart/form-data" method="post" id="form">
-		<input type="text" name="title">
-		<br/>
-		<input type="file" name="upl" id="filename">
-		<br/>
-		<input type="submit" id="submitButton">
-	</form>
-	<button id="sendButton" class="sendButton" data-url="/schedule/{{groupName}}"  >Send Data</button>
-	<br/>
-	<br/>
+	<input type="submit" id="submitButton">
+</form>
+<button id="sendButton" class="sendButton" data-url="/schedule/{{groupName}}">Send Data</button>
+<br/>
+<br/>
 
 
-	<p class="clear">
-		{{logged_in}} | {{{ body }}}
+<p class="clear">
+	{{logged_in}} | {{{ body }}}
 
-		<script>
-			var take_photo_btn;
-			var image;
-			var video;
-			var submitButton;
-			var submitClick;
-			var hidden_canvas;
+	<script>
+		var snap;
+		var snapAfter;
+		var myBlob;
+		var formData;
 
-			var dummyFormData = [];
-			dummyFormType = {
-				lastModified: 1518790839876,
-				lastModifiedDate: "Fri Feb 16 2018 08:20:39 GMT-0600 (CST)",
-				name: "Notes.txt",
-				type: "text/plain",
-				webkitRelativePath: ""
-			};
-			dummyFormData.push(dummyFormType);
+		var take_photo_btn;
+		var image;
+		var video;
+		var submitButton;
+		var submitClick;
+		var hidden_canvas;
 
-			console.log(dummyFormData);
+		var dummyFormData = [];
+		dummyFormType = {
+			lastModified: 1518790839876,
+			lastModifiedDate: "Fri Feb 16 2018 08:20:39 GMT-0600 (CST)",
+			name: "Notes.txt",
+			type: "text/plain",
+			webkitRelativePath: ""
+		};
+		dummyFormData.push(dummyFormType);
+
+		console.log(dummyFormData);
+
+		var sendImageClick = function () {
+
+			try {
+				snapAfter = hidden_canvas.toDataURL('image/png');
+				myBlob = new Blob([snapAfter], { type: "image/png" });
+				console.log(myBlob);
+
+				// here unnecessary - just for testing if it can be read from local storage
+				localStorage.myfile = myBlob;
+
+				//formData = new FormData();
+				//formData.append('upl', localStorage.myfile, 'picture1.png');
+				//formData.append('upl', myBlob, 'picture1.png');
+				//console.log( formData );
+				//console.log( formData.getAll('upl'));
 
 
-			var sendClick = function () {
-				// $("#submitButton").on("click", function (e) { --}}
-				console.log("pressed the button");
-				//e.preventDefault();
-				console.log(this);
-				var formData = new FormData(this);
-				console.log(formData);
-				if ((hidden_canvas === undefined) || (hidden_canvas === null)) {
-					//if hidden_canvas doesn't exist then it means a picture was not taken
-					takeSnapshot();
-					return;
-				};
-				hidden_canvas.style.display = "block";
-
-				//right now, the image is on hidden_canvas
-				var elephant = document.getElementById("snap");
-				console.log ("elephant =\n" + elephant);
-
-
-				var filename = document.querySelector('#filename');
-				console.log(filename.files);
-				//$(filename).attr("value", snap);
-				console.log(filename.files[0]);
-				//var data = new FormData(jQuery('form'[0]));
-				data = localStorage.getItem('elephant');
-				console.log("data=");
-				console.log(data);
 				$.ajax({
 					type: "POST",
-					url: "/picture/create",
-					data: data,
+					url: "/picture/create-img",
+					data: myBlob,
 					processData: false,
 					ContentType: false,
 					method: "POST",
@@ -87,122 +81,179 @@
 						console.log(e);
 					}
 				});
-				var addr = $(sendButton).attr("data-url");
-				console.log(addr);
-				window.location.href = addr;
-			};
-			//};
-
-
-			var takeSnapshot = function () {
-				// Here we're using a trick that involves a hidden canvas element.  
-
-				hidden_canvas = document.querySelector('canvas')
-				var context = hidden_canvas.getContext('2d');
-
-				var width = video.videoWidth,
-					height = video.videoHeight;
-
-				if (width && height) {
-
-					// Setup a canvas with the same dimensions as the video.
-					hidden_canvas.width = width;
-					hidden_canvas.height = height;
-
-					// Make a copy of the current frame in the video on the canvas.
-					context.drawImage(video, 0, 0, width, height);
-
-					// Turn the canvas image into a dataURL that can be used as a src for our photo.
-					// the returned value can be used to upload the image
-					return hidden_canvas.toDataURL('image/png');
-				}
+			}
+			catch (e) {
+				console.log("storage failed #2 : " + e);
 			};
 
-			$(document.body).on("click", ".sendButton", sendClick);
-			//$(document.body).on("load", ".img-item", sendClick);
 
 
-			$(document).ready(function () {
+		};
 
-				take_photo_btn = document.querySelector('#snapButton');
-				image = document.querySelector('#snap');
-				video = document.getElementById('video');
-				submitButton = document.querySelector('#sendButton');
+		var sendClick = function () {
+			// $("#submitButton").on("click", function (e) { --}}
+			console.log("pressed the button");
+			//e.preventDefault();
+			console.log(this);
+			var formData = new FormData(this);
+			console.log(formData);
+			if ((hidden_canvas === undefined) || (hidden_canvas === null)) {
+				//if hidden_canvas doesn't exist then it means a picture was not taken
+				takeSnapshot();
+				return;
+			};
+			hidden_canvas.style.display = "block";
 
-				console.log("submit button=");
-				console.log(submitButton);
+			//right now, the image is on hidden_canvas
+			var elephant = document.getElementById("snap");
+			console.log("elephant =\n" + elephant);
 
-				//					console.log("pressed the button");
-				//					//e.preventDefault();
-				//					var formData = new FormData(this);
-				//					console.log(formData);
 
-				navigator.mediaDevices.getUserMedia(
-					// Options
-					{
-						video: true
-					}).then(
-						// Success Callback
-						function (mediaStream) {
-							// Create an object URL for the video stream and
-							// set it as src of our HTLM video element.
-							video.srcObject = mediaStream;
-							// Play the video element to show the stream to the user.
-							//to hide it, change its 
-							video.onloadedmetadata = function (e) {
-								video.play();
-							};
-						}).catch(
-							// Error Callback
-							function (err) {
-								// Most common errors are PermissionDenied and DevicesNotFound.
-								console.error(err);
-
-							}
-						);
-
-				take_photo_btn.addEventListener("click", function (e) {
-
-					e.preventDefault();
-
-					var snap = takeSnapshot();
-
-					try { 
-						localStorage.setItem('elephant', snap);
-						}
-						catch(e) {
-							console.log("storage failed : " + e);
-						};
-
-					// Show image. 
-					image.setAttribute('src', snap);
-					image.classList.add("visible");
-					image.setAttribute('width', 320)
-					image.setAttribute('height', 240)
-					video.style.display = "none";
+			var filename = document.querySelector('#filename');
+			console.log(filename.files);
+			//$(filename).attr("value", snap);
+			console.log(filename.files[0]);
+			//var data = new FormData(jQuery('form'[0]));
+			data = localStorage.getItem('elephant');
+			//console.log("data=");
+			//console.log(data);
+			$.ajax({
+				type: "POST",
+				url: "/picture/create",
+				data: data,
+				processData: false,
+				ContentType: false,
+				method: "POST",
+				success: function (r) {
+					console.log("result", r);
 					hidden_canvas.style.display = "none";
-
-					var filename = document.querySelector('#filename');
-					console.log(filename.files);
-					//$(filename).files[0] = snap;
-					$(filename).attr("value", snap);
-					console.log("after snap");
-					console.log(filename.files);
-
-
-					// Enable delete and save buttons
-					//delete_photo_btn.classList.remove("disabled");
-					//RPB save button
-					//download_photo_btn.classList.remove("disabled");
-
-					// Set the href attribute of the download button to the snap url.
-					//RPB save button turns it on 
-					//download_photo_btn.href = snap;
-
-					// Pause video playback of stream.
-					video.pause();
-
-				});
+				},
+				error: function (e) {
+					console.log(e);
+				}
 			});
+			var addr = $(sendButton).attr("data-url");
+			console.log(addr);
+			//window.location.href = addr;
+		};
+		//};
 
-		</script>
+
+		var takeSnapshot = function () {
+			// Here we're using a trick that involves a hidden canvas element.  
+
+			hidden_canvas = document.querySelector('canvas')
+			var context = hidden_canvas.getContext('2d');
+
+			var width = video.videoWidth,
+				height = video.videoHeight;
+
+			if (width && height) {
+
+				// Setup a canvas with the same dimensions as the video.
+				hidden_canvas.width = width;
+				hidden_canvas.height = height;
+
+				// Make a copy of the current frame in the video on the canvas.
+				context.drawImage(video, 0, 0, width, height);
+
+				// Turn the canvas image into a dataURL that can be used as a src for our photo.
+				// the returned value can be used to upload the image
+				return hidden_canvas.toDataURL('image/png');
+			}
+		};
+
+		$(document.body).on("click", ".sendButton", sendImageClick);
+		//$(document.body).on("load", ".img-item", sendClick);
+
+
+		$(document).ready(function () {
+
+			take_photo_btn = document.querySelector('#snapButton');
+			image = document.querySelector('#snap');
+			video = document.getElementById('video');
+			submitButton = document.querySelector('#sendButton');
+
+			console.log("submit button=");
+			console.log(submitButton);
+
+			//					console.log("pressed the button");
+			//					//e.preventDefault();
+			//					var formData = new FormData(this);
+			//					console.log(formData);
+
+			navigator.mediaDevices.getUserMedia(
+				// Options
+				{
+					video: true
+				}).then(
+					// Success Callback
+					function (mediaStream) {
+						// Create an object URL for the video stream and
+						// set it as src of our HTLM video element.
+						video.srcObject = mediaStream;
+						// Play the video element to show the stream to the user.
+						//to hide it, change its 
+						video.onloadedmetadata = function (e) {
+							video.play();
+						};
+					}).catch(
+						// Error Callback
+						function (err) {
+							// Most common errors are PermissionDenied and DevicesNotFound.
+							console.error(err);
+
+						}
+					);
+
+			take_photo_btn.addEventListener("click", function (e) {
+
+				e.preventDefault();
+
+				snap = takeSnapshot();
+				
+
+
+				/*
+				fetch('/picture/create-img',
+					{
+						method: 'post',
+						body: fd
+					});
+				*/
+
+				// Show image. 
+//				//image.setAttribute('src', snap);
+				var snapOfCircle = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAAAAACPAi4CAAAAB3RJTUUH1QEHDxEhOnxCRgAAAAlwSFlzAAAK8AAACvABQqw0mAAAAXBJREFUeNrtV0FywzAIxJ3+K/pZyctKXqamji0htEik9qEHc3JkWC2LRPCS6Zh9HIy/AP4FwKf75iHEr6eU6Mt1WzIOFjFL7IFkYBx3zWBVkkeXAUCXwl1tvz2qdBLfJrzK7ixNUmVdTIAB8PMtxHgAsFNNkoExRKA+HocriOQAiC+1kShhACwSRGAEwPP96zYIoE8Pmph9qEWWKcCWRAfA/mkfJ0F6dSoA8KW3CRhn3ZHcW2is9VOsAgoqHblncAsyaCgcbqpUZQnWoGTcp/AnuwCoOUjhIvCvN59UBeoPZ/AYyLm3cWVAjxhpqREVaP0974iVwH51d4AVNaSC8TRNNYDQEFdlzDW9ob10YlvGQm0mQ+elSpcCCBtDgQD7cDFojdx7NIeHJkqi96cOGNkfZOroZsHtlPYoR7TOp3Vmfa5+49uoSSRyjfvc0A1kLx4KC6sNSeDieD1AWhrJLe0y+uy7b9GjP83l+m68AJ72AwSRPN5g7uwUAAAAAElFTkSuQmCC";
+
+				image.setAttribute('src', snapOfCircle);
+				image.classList.add("visible");
+				image.setAttribute('width', 320)
+				image.setAttribute('height', 240)
+				video.style.display = "none";
+//				//hidden_canvas.style.display = "none";
+
+				//				var filename = document.querySelector('#filename');
+				//				console.log(filename.files);
+				//$(filename).files[0] = snap;
+				//				$(filename).attr("value", snap);
+				//				console.log("after snap");
+				//				console.log(filename.files);
+
+
+				// Enable delete and save buttons
+				//delete_photo_btn.classList.remove("disabled");
+				//RPB save button
+				//download_photo_btn.classList.remove("disabled");
+
+				// Set the href attribute of the download button to the snap url.
+				//RPB save button turns it on 
+				//download_photo_btn.href = snap;
+
+				// Pause video playback of stream.
+				video.pause();
+
+			});
+		});
+
+	</script>
